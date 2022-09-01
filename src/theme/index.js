@@ -53,7 +53,7 @@ export const theme = createTheme({
           }
         }
       }
-    },
+    },  
     MuiCardHeader: {
       defaultProps: {
         titleTypographyProps: {

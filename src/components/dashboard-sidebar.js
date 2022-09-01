@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, Button, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+//jgr added
+import LinkIcon from '@mui/icons-material/Link';
+import AddIcon from '@mui/icons-material/Add';
 import { ChartBar as ChartBarIcon } from '../icons/chart-bar';
 import { Cog as CogIcon } from '../icons/cog';
 import { Lock as LockIcon } from '../icons/lock';
@@ -21,6 +24,12 @@ const items = [
     href: '/',
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Dashboard'
+  },
+  // jgr added
+  {
+    href: '/url',
+    icon: (<LinkIcon fontSize="small" />),
+    title: 'Url'
   },
   {
     href: '/customers',
@@ -107,42 +116,21 @@ export const DashboardSidebar = (props) => {
             </NextLink>
           </Box>
           <Box sx={{ px: 2 }}>
-            <Box
-              sx={{
-                alignItems: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                cursor: 'pointer',
-                display: 'flex',
-                justifyContent: 'space-between',
-                px: 3,
-                py: '11px',
-                borderRadius: 1
-              }}
-            >
-              <div>
-                <Typography
-                  color="inherit"
-                  variant="subtitle1"
+                <NextLink
+                  href="/qr-code-gen"
+                  passHref
                 >
-                  Acme Inc
-                </Typography>
-                <Typography
-                  color="neutral.400"
-                  variant="body2"
-                >
-                  Your tier
-                  {' '}
-                  : Premium
-                </Typography>
-              </div>
-              <SelectorIcon
-                sx={{
-                  color: 'neutral.500',
-                  width: 14,
-                  height: 14
-                }}
-              />
-            </Box>
+                  <Button
+                    color="error"
+                    component="a"
+                    startIcon={(<AddIcon />)}
+                    fullWidth
+                    sx={{ mt: 2 }}
+                    variant="contained"
+                  >
+                    New QR Code
+                  </Button>
+                </NextLink>
           </Box>
         </div>
         <Divider
