@@ -33,7 +33,8 @@ export const QRGenMain = (props) => {
             container
             spacing={3}
           >
-            <img src='/static/images/sidebar_pro.png'/>
+            
+            <img src={props.qrRes}/>
 
  
 
