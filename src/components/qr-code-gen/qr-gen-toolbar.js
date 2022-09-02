@@ -23,15 +23,23 @@ export const QRGenToolbar = (props) => {
 
   const GenerateQRCode = () => {
     QRCode.toDataURL(url,{
-      width:800,
+      width:600,
       margin:2,
-      color:{
-        // dark: '#335383FF',
-        // light: '#EEEEEEEE'
-      }
+      qrOptions:{
+        typeNumber:0,
+        mode:"Byte"
+      },
+      dotsOptions:{
+        type:"dots",
+        color:"#27c439",
+        gradient:null
+      },
+      // color:{
+      //   // dark: '#335383FF',
+      //   // light: '#EEEEEEEE'
+      // }
     }, (err, url) => {
       if(err) return console.error(err)
-      console.log(url)
       setQr(url)
     }
     )
@@ -63,7 +71,7 @@ export const QRGenToolbar = (props) => {
           sx={{ m: 1 }}
           variant="h4"
         >
-          Enter the URL of your site:{url}
+          Enter the URL for QR code
         </Typography>
         <Box sx={{ m: 1 }}>
           <Button

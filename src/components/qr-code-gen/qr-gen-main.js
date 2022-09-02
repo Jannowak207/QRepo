@@ -14,33 +14,29 @@ import {
 
 
 export const QRGenMain = (props) => {
-  const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(false);
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
 
 
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      {...props}
-    >
       <Card>
-
         <CardContent>
           <Grid
-            container
-            spacing={3}
-          >
-            
-            <img src={props.qrRes}/>
-
- 
-
-
-
-
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+            >
+            <Box
+                component="img"
+                sx={{
+                  width: '75%',
+                }}
+                alt="qr code"
+                src={props.qrRes}
+              />
           </Grid>
         </CardContent>
         <Divider />
@@ -49,26 +45,40 @@ export const QRGenMain = (props) => {
             display: 'flex',
             justifyContent: 'flex-end',
             p: 2
-          }}
-        >
-                <FormControlLabel
-        control={<Checkbox checked={checked} onChange={handleChange} />}
-        label="Save as a template"
-      />
-          <Button
-            color="primary"
-            variant="contained"
-          >
-            Print quality Download
-          </Button>
-          <Button
-            color="primary"
-            variant="contained"
-          >
-            Email Me
-          </Button>
+          }}>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <FormControlLabel 
+                  control={<Checkbox checked={checked} onChange={handleChange} />}
+                  label="Save as a template"
+                />
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                  color="success"
+                  href={props.qrRes}
+                  download="qrcode.png"
+                  variant="contained"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                Print quality Download
+              </Button>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                  color="success"
+                  variant="contained"
+                  style={{
+                    width: "100%",
+                  }}
+                >
+                Email Me
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       </Card>
-    </form>
   );
 };

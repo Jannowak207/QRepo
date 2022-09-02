@@ -31,7 +31,7 @@ const FileInput = () => {
     <>
       {imageUrl && selectedImage && (
         <Box mt={0} textAlign="left">
-          <div>Image Preview:</div>
+          <div>Logo Preview:</div>
           <img src={imageUrl} alt={selectedImage.name} height="80px" />
         </Box>
       )}
@@ -42,15 +42,35 @@ const FileInput = () => {
           style={{ display: 'none' }}
           onChange={e => setSelectedImage(e.target.files[0])}
       />
-      <label htmlFor="select-image">
-        <Button variant="contained" color="primary" component="span">
-          Upload Image
-        </Button>
-      </label>
+      <Grid container spacing={1}>
+        <Grid item xs={12} md={12}>
+          <label htmlFor="select-image">
+            <Button 
+                variant="contained"
+                color="primary"
+                style={{
+                  width: "30%",
+                }}
+                component="span">
+              Upload Image
+            </Button>
+          </label>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <Button variant="contained"
+              color="primary"
+              component="span"
+              style={{
+                width: "30%",
+              }}
+              onClick={handleRemove}>
+            Remove logo
+          </Button>
+        </Grid>
+      </Grid>
 
-        <Button variant="contained" color="primary" component="span" onClick={handleRemove}>
-          Remove logo
-        </Button>
+
+
     </>
   );
 };

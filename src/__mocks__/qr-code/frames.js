@@ -43,18 +43,18 @@ export const frames = [
   },
   {
     id: uuid(),
-    avatarUrl: '/static/images/qr_code/frames/frame1.svg',
+    avatarUrl: '/static/images/qr_code/frames/1.svg',
   },
   {
     id: uuid(),
-    avatarUrl: '/static/images/qr_code/frames/frame2.svg',
+    avatarUrl: '/static/images/qr_code/frames/2.svg',
   },
   {
     id: uuid(),
-    avatarUrl: '/static/images/qr_code/frames/frame3.svg',
+    avatarUrl: '/static/images/qr_code/frames/3.svg',
   },
   {
     id: uuid(),
-    avatarUrl: '/static/images/qr_code/frames/frame4.svg',
+    avatarUrl: '/static/images/qr_code/frames/4.svg',
   },
 ];
