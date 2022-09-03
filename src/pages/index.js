@@ -1,13 +1,14 @@
 import Head from 'next/head';
 import { Box, Container, Grid } from '@mui/material';
-import { Budget } from '../components/dashboard/budget';
+import { TotalScans } from '../components/dashboard/total-scans';
 import { LatestOrders } from '../components/dashboard/latest-orders';
 import { LatestProducts } from '../components/dashboard/latest-products';
-import { Sales } from '../components/dashboard/sales';
-import { TasksProgress } from '../components/dashboard/tasks-progress';
-import { TotalCustomers } from '../components/dashboard/total-customers';
-import { TotalProfit } from '../components/dashboard/total-profit';
-import { TrafficByDevice } from '../components/dashboard/traffic-by-device';
+import { LatestQRCodes } from '../components/dashboard/latest-qr-codes';
+import { TotalQRCampaigns } from '../components/dashboard/total-qr-campaigns';
+import { QRCampaignsRemaining } from '../components/dashboard/qr-campaigns-remaining';
+import { TopTenQRCampaigns } from '../components/dashboard/top-ten-qr-campaigns';
+import { WatchList } from 'src/components/dashboard/watch-list';
+import { QRCodesByDevice } from '../components/dashboard/qr-codes-by-device';
 import { DashboardLayout } from '../components/dashboard-layout';
 
 const Dashboard = () => (
@@ -31,39 +32,48 @@ const Dashboard = () => (
         >
           <Grid
             item
-            lg={3}
-            sm={6}
-            xl={3}
+            lg={4}
+            sm={12}
+            xl={4}
             xs={12}
           >
-            <Budget />
+            <TotalScans />
           </Grid>
           <Grid
             item
-            xl={3}
-            lg={3}
-            sm={6}
+            xl={4}
+            lg={4}
+            sm={12}
             xs={12}
           >
-            <TotalCustomers />
+            <QRCampaignsRemaining />
           </Grid>
           <Grid
             item
-            xl={3}
-            lg={3}
-            sm={6}
+            xl={4}
+            lg={4}
+            sm={12}
             xs={12}
           >
-            <TasksProgress />
+            <TotalQRCampaigns />
           </Grid>
           <Grid
             item
-            xl={3}
-            lg={3}
-            sm={6}
+            xl={12}
+            lg={12}
+            sm={12}
             xs={12}
           >
-            <TotalProfit sx={{ height: '100%' }} />
+            <TopTenQRCampaigns />
+          </Grid>
+          <Grid
+            item
+            xl={12}
+            lg={12}
+            sm={12}
+            xs={12}
+          >
+            <WatchList />
           </Grid>
           <Grid
             item
@@ -72,7 +82,7 @@ const Dashboard = () => (
             xl={9}
             xs={12}
           >
-            <Sales />
+            <LatestQRCodes />
           </Grid>
           <Grid
             item
@@ -81,9 +91,9 @@ const Dashboard = () => (
             xl={3}
             xs={12}
           >
-            <TrafficByDevice sx={{ height: '100%' }} />
+            <QRCodesByDevice sx={{ height: '100%' }} />
           </Grid>
-          <Grid
+          {/* <Grid
             item
             lg={4}
             md={6}
@@ -100,7 +110,7 @@ const Dashboard = () => (
             xs={12}
           >
             <LatestOrders />
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>

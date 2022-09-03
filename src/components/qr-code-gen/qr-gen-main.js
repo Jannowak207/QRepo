@@ -34,7 +34,7 @@ export const QRGenMain = (props) => {
                 sx={{
                   width: '75%',
                 }}
-                alt="qr code"
+                alt="QR code image"
                 src={props.qrRes}
               />
           </Grid>

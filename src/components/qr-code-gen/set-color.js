@@ -1,4 +1,4 @@
-import { Button, Grid, RadioGroup, FormControlLabel, Radio, FormLabel, Checkbox} from '@mui/material';
+import { Button, Divider, Grid, RadioGroup, FormControlLabel, Radio, FormLabel, Checkbox} from '@mui/material';
 import { ColorPicker, ColorBox, ColorInput, ColorPalette, ColorButton  } from 'material-ui-color';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import Select from '@mui/material/Select';
@@ -46,17 +46,22 @@ const SetColor = () => {
             value={selection.value2}
             onChange={updateSelection}
           >
-          {data.map(datum => (
-            <Grid container spacing={1}>
-              <Grid item xs={12} md={8}>
-            <FormControlLabel
-              label={datum.value}
-              key={datum.id}
-              value={datum.id}
-              control={<Radio color="primary" />}
-            />
-            </Grid>
-            </Grid>
+          {data.map((datum) => (
+            // <Grid container spacing={1}>
+              <Grid 
+                item
+                xs={12}
+                md={8}
+                key={datum.id}
+                >
+                <FormControlLabel
+                  label={datum.value}
+                  key={datum.id}
+                  value={datum.id}
+                  control={<Radio color="primary" />}
+                />
+              </Grid>
+            // </Grid>
           ))}
         </RadioGroup>
       </Grid>
@@ -95,7 +100,7 @@ const SetColor = () => {
         Eye color
       </Grid>}
       { checked && <Grid item xs={12} md={6}>
-        <ColorPicker defaultValue="transparent"/>
+          <ColorPicker defaultValue="transparent"/>
       </Grid>}
       { checked && <Grid item xs={12} md={6}>
         <ColorPicker defaultValue="transparent"/>

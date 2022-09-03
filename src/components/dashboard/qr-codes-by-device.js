@@ -4,7 +4,7 @@ import LaptopMacIcon from '@mui/icons-material/LaptopMac';
 import PhoneIcon from '@mui/icons-material/Phone';
 import TabletIcon from '@mui/icons-material/Tablet';
 
-export const TrafficByDevice = (props) => {
+export const QRCodesByDevice = (props) => {
   const theme = useTheme();
 
   const data = {
@@ -65,7 +65,7 @@ export const TrafficByDevice = (props) => {
 
   return (
     <Card {...props}>
-      <CardHeader title="Traffic by Device" />
+      <CardHeader title="QR Codes by Device" />
       <Divider />
       <CardContent>
         <Box

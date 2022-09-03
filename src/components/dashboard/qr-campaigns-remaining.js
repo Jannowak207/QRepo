@@ -1,12 +1,9 @@
 import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import MoneyIcon from '@mui/icons-material/Money';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 
-export const Budget = (props) => (
-  <Card
-    sx={{ height: '100%' }}
-    {...props}
-  >
+export const QRCampaignsRemaining = (props) => (
+  <Card {...props}>
     <CardContent>
       <Grid
         container
@@ -19,41 +16,29 @@ export const Budget = (props) => (
             gutterBottom
             variant="overline"
           >
-            BUDGET
+            QR Code Campaigns Remaining
           </Typography>
           <Typography
             color="textPrimary"
             variant="h4"
           >
-            $24k
+            10
           </Typography>
-        </Grid>
-        <Grid item>
-          <Avatar
-            sx={{
-              backgroundColor: 'error.main',
-              height: 56,
-              width: 56
-            }}
-          >
-            <MoneyIcon />
-          </Avatar>
         </Grid>
       </Grid>
       <Box
         sx={{
-          pt: 2,
+          alignItems: 'center',
           display: 'flex',
-          alignItems: 'center'
+          pt: 2
         }}
       >
-        <ArrowDownwardIcon color="error" />
+        <ArrowUpwardIcon color="success" />
         <Typography
-          color="error"
+          variant="body2"
           sx={{
             mr: 1
           }}
-          variant="body2"
         >
           12%
         </Typography>

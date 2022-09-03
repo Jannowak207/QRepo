@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { DashboardNavbar } from './dashboard-navbar';
 import { DashboardSidebar } from './dashboard-sidebar';
@@ -29,6 +29,7 @@ export const DashboardLayout = (props) => {
             width: '100%'
           }}
         >
+
           {children}
         </Box>
       </DashboardLayoutRoot>

@@ -23,7 +23,7 @@ const Account = () => (
           sx={{ mb: 3 }}
           variant="h4"
         >
-          Account
+          My Account
         </Typography>
         <Grid
           container

@@ -137,7 +137,15 @@ export const QRGenOptions = (props) => {
                 Eye Patterns
               </Typography>
                 {eyes.map((eye) => (
-                  <QRGenOptionCard option={eye} />
+                  // <Grid
+                  //   item
+                  //   key={eye.id}
+                  //   lg={12}
+                  //   md={12}
+                  //   xs={12}
+                  //   >
+                  <QRGenOptionCard option={eye} key={eye.id} />
+                  // </Grid>
                 ))}
             </AccordionDetails>
           </Accordion>
@@ -180,7 +188,7 @@ export const QRGenOptions = (props) => {
           </AccordionSummary>
           <AccordionDetails>
             {frames.map((frame) => (
-              <QRGenOptionCard option={frame} />
+              <QRGenOptionCard option={frame} key={frame.id} />
             ))}
           </AccordionDetails>
         </Accordion>
@@ -195,7 +203,7 @@ export const QRGenOptions = (props) => {
           </AccordionSummary>
           <AccordionDetails>
             {templates.map((template) => (
-              <QRGenOptionCard option={template} />
+              <QRGenOptionCard option={template} key={template.id}/>
             ))}
           </AccordionDetails>
         </Accordion>
