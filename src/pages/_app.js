@@ -8,6 +8,7 @@ import { createEmotionCache } from '../utils/create-emotion-cache';
 import { theme } from '../theme';
 const clientSideEmotionCache = createEmotionCache();
 
+
 const App = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
@@ -15,6 +16,7 @@ const App = (props) => {
 
   return (
     <CacheProvider value={emotionCache}>
+       
       <Head>
         <title>
           Material Kit Pro
@@ -30,6 +32,7 @@ const App = (props) => {
             {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>
       </LocalizationProvider>
+ 
     </CacheProvider>
   );
 };

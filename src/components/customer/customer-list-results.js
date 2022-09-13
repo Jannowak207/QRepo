@@ -7,6 +7,7 @@ import {
   Box,
   Card,
   Checkbox,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -16,11 +17,29 @@ import {
   Typography
 } from '@mui/material';
 import { getInitials } from '../../utils/get-initials';
+import MUIDataTable from 'mui-datatables';
+import { useRouter } from 'next/router';
+import { RouterOutlined } from '@mui/icons-material';
+import CustomerInfo from './customer-info';
 
 export const CustomerListResults = ({ customers, ...rest }) => {
+  const router = useRouter();
   const [selectedCustomerIds, setSelectedCustomerIds] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(0);
+  // for edit a customer
+  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+  const [isOneSelected, setIsOneSelected] = useState(false);
+  const clickHandler = (id) => {
+    console.log(selectedCustomerId);
+    setSelectedCustomerId(id);
+    setIsOneSelected(true);
+    router.push("/customer/editCustomer");
+  };
+  const handleChange = () => {
+    setSelectedCustomerId(null);
+    setIsOneSelected(false);
+  };
 
   const handleSelectAll = (event) => {
     let newSelectedCustomerIds;
@@ -66,9 +85,9 @@ export const CustomerListResults = ({ customers, ...rest }) => {
     <Card {...rest}>
       <PerfectScrollbar>
         <Box sx={{ minWidth: 1050 }}>
-          <Table>
+          {(true) && <Table>
             <TableHead>
-              <TableRow>
+              <TableRow >
                 <TableCell padding="checkbox">
                   <Checkbox
                     checked={selectedCustomerIds.length === customers.length}
@@ -80,7 +99,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                     onChange={handleSelectAll}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell >
                   Name
                 </TableCell>
                 <TableCell>
@@ -103,6 +122,10 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                   hover
                   key={customer.id}
                   selected={selectedCustomerIds.indexOf(customer.id) !== -1}
+                  onClick={() => {
+                    
+                    clickHandler(customer.id);
+                  }}
                 >
                   <TableCell padding="checkbox">
                     <Checkbox
@@ -147,7 +170,7 @@ export const CustomerListResults = ({ customers, ...rest }) => {
                 </TableRow>
               ))}
             </TableBody>
-          </Table>
+          </Table>}
         </Box>
       </PerfectScrollbar>
       <TablePagination

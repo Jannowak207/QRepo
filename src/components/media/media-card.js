@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { Avatar, Box, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { Avatar, Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 import { Clock as ClockIcon } from '../../icons/clock';
 import { Download as DownloadIcon } from '../../icons/download';
 
-export const ProductCard = ({ product, ...rest }) => (
+export const MediaCard = ({ product, ...rest }) => (
   <Card
     sx={{
       display: 'flex',
@@ -44,7 +44,7 @@ export const ProductCard = ({ product, ...rest }) => (
     </CardContent>
     <Box sx={{ flexGrow: 1 }} />
     <Divider />
-    <Box sx={{ p: 2 }}>
+    {/* <Box sx={{ p: 2 }}>
       <Grid
         container
         spacing={2}
@@ -87,10 +87,10 @@ export const ProductCard = ({ product, ...rest }) => (
           </Typography>
         </Grid>
       </Grid>
-    </Box>
+    </Box> */}
   </Card>
 );
 
-ProductCard.propTypes = {
+MediaCard.propTypes = {
   product: PropTypes.object.isRequired
 };

@@ -78,7 +78,7 @@ const Register = () => {
       >
         <Container maxWidth="sm">
           <NextLink
-            href="/"
+            href="/dashboard"
             passHref
           >
             <Button

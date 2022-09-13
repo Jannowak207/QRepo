@@ -58,6 +58,7 @@ const QRCodeGen = () => {
                   md={6}
                   xs={12}
                 >
+                  {/* name=value format */}
                   <QRGenMain qrRes={qrResult}/>
                 </Grid>
               </Grid>

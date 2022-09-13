@@ -5,10 +5,10 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 export const TopTenQRCampaigns = (props) => {
   
   //sample data
-  const columns = ["Campaign Name", "QR ID", "Country", "City", "Date", "Time","Type", "Top Device", "Top Location", "Scans"];
+  const columns = ["id","Campaign Name", "QR ID", "Country", "City", "Date", "Time","Type", "Top Device", "Top Location", "Scans"];
   const data = [
-    ["Campaign WVC2", "WVC2", "US", "Los Angeles", "9-1-2022", "9:30 AM", "URL", "iOS", "Bjaerred","1"],
-    ["Campaign ACD", "ACD", "Australia", "Sydney", "4-19-2022", "10:30 AM", "File", "Android", "ABCV","5"],
+    ["2","Campaign WVC2", "WVC2", "US", "Los Angeles", "9-1-2022", "9:30 AM", "URL", "iOS", "Bjaerred","1"],
+    ["1","Campaign ACD", "ACD", "Australia", "Sydney", "4-19-2022", "10:30 AM", "File", "Android", "ABCV","5"],
   ];
   const options = {
     filterType: "checkbox",
@@ -33,6 +33,7 @@ export const TopTenQRCampaigns = (props) => {
               data={data}
               columns={columns}
               options={options}
+              onRowClick={(rowData, rowMeta) => {console.log("ok")}}
             />
           </Grid>
         </Grid>
