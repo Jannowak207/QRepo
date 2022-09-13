@@ -88,7 +88,7 @@ export default function AccountMenu() {
         </MenuItem> */}
         <NextLink href={"/account"} passHref>
           <MenuItem>
-            <Avatar /> My account
+            <Avatar /> My Account
           </MenuItem>
         </NextLink>
         <Divider />
