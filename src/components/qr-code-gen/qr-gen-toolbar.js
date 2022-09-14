@@ -23,6 +23,8 @@ import QRCode from "qrcode";
 import { blue, red } from "@mui/material/colors";
 
 export const QRGenToolbar = (props) => {
+  console.log("QR toolbar here:props:"+props)
+  console.log("url"+props.url)
   const [url, setUrl] = useState("");
   const [qr, setQr] = useState("");
 
@@ -79,6 +81,7 @@ export const QRGenToolbar = (props) => {
           mt: 1,
         }}
       >
+        {props.url && <QRCodeCanvas value={props.url} />}
         {/* <Card> */}
         {/* <Box
             sx={{
@@ -130,7 +133,7 @@ export const QRGenToolbar = (props) => {
                     m: 1,
                   }}
                 >
-                  {url && <QRCodeCanvas value={url} />}
+                  
                 </Box>
                 <Divider />
                 <Box

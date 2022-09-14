@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,11 @@ export const QRGenMain = (props) => {
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
+  const fileUrl =props.url;
   const [value, setValue] = useState("https://www.1stg.me");
+  useEffect( () => {
+    setValue(fileUrl)
+  },[])
   const opt = {
     width: 400,
     margin: 2,
@@ -89,7 +93,10 @@ export const QRGenMain = (props) => {
           </Grid>
         </Grid>
       </Box>
-      {/* <div>dataUrl: {dataUrl}</div>
+
+
+
+      <div>dataUrl: {dataUrl}</div>
       <img src={dataUrl} />
       <input onChange={(e) => setValue(e.currentTarget.value)} />
       <Button
@@ -102,7 +109,7 @@ export const QRGenMain = (props) => {
         }}
       >
         Print quality Download
-      </Button> */}
+      </Button>
     </Card>
   );
 };

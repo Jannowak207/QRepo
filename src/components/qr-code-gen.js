@@ -9,7 +9,9 @@ import NextLink from "next/link";
 // for qr result
 import { useState } from "react";
 
-const QRCodeGen = () => {
+const QRCodeGen = (props) => {
+  console.log("Here is QR Gen compoenet:props:"+props)
+  console.log("url:"+props.url)
   const [qrResult, setQRResult] = useState("default");
   // when qr result is received from qr-gen-toolbar
   const handleCallback = (qrRes) => {
@@ -20,7 +22,8 @@ const QRCodeGen = () => {
     <>
       <Container maxWidth={false}>
         {/* from this child component receive qr result */}
-        <QRGenToolbar parentCallback={handleCallback} />
+        <QRGenToolbar parentCallback={handleCallback} 
+        url={props.url}/>
         <Box sx={{ mt: 1 }}>
           <Grid container spacing={1}>
             <Grid item lg={6} md={6} xs={12}>
@@ -28,7 +31,7 @@ const QRCodeGen = () => {
             </Grid>
             <Grid item lg={6} md={6} xs={12}>
               {/* name=value format */}
-              <QRGenMain qrRes={qrResult} />
+              <QRGenMain url={props.url} />
             </Grid>
           </Grid>
         </Box>

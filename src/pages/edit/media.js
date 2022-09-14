@@ -10,6 +10,7 @@ import {
   Divider,
   Drawer,
   Grid,
+  Input,
   TextField,
   Typography,
   useMediaQuery,
@@ -18,14 +19,36 @@ import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useRouter } from "next/router";
 import QRCodeGen from "../../components/qr-code-gen";
+import { useState, useEffect } from "react";
 
 const EditMedia = () => {
-  let date = new Date();
-  const sampleData = {
-    fileType: "Movie",
-    fileSize: 5,
-    filrUrl: "www.mymedia.com",
-    filedate: date,
+
+  const [mediaData, setMediaData] = useState({
+    fileName:"",
+    fileType: "",
+    fileSize: 0,
+    fileUrl: "",
+  });
+  const handleChange = (event) => {
+    setMediaData({
+      ...mediaData,
+      fileName: event.target.value,
+      fileType: event.target.files[0].type,
+      fileSize:event.target.files[0].size,
+      fileUrl:event.target.value
+    });
+    // let array = mediaData.fileName.split(".")
+    // console.log("array:"+array)
+    // mediaData.fileType = array.pop();
+    // console.log("fileType:"+mediaData.fileType)
+    // mediaData.fileSize=event.target.files[0].size
+    // mediaData.fileName=event.target.files[0].name
+    // mediaData.fileType=event.target.files[0].type
+    // setMediaData({
+    //   ...mediaData,
+    //   fileType:
+    // })
+
   };
   const router = useRouter();
   const handleSave = () => {
@@ -76,14 +99,17 @@ const EditMedia = () => {
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item lg={6} md={6} sx={12}>
-                  <TextField
+                  <Input
                     autoFocus
                     margin="dense"
                     id="mediafile"
                     type="file"
+                    name="fileName"
                     fullWidth
                     variant="standard"
                     label="Media File"
+                    value={mediaData.fileName}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item lg={3} md={3} sx={12}>
@@ -95,7 +121,9 @@ const EditMedia = () => {
                     fullWidth
                     variant="standard"
                     label="File Type"
-                    value={sampleData.fileType}
+                    name="fileType"
+                    value={mediaData.fileType}
+                    onChange={handleChange}
                   />
                 </Grid>
                 <Grid item lg={3} md={3} sx={12}>
@@ -107,7 +135,9 @@ const EditMedia = () => {
                     fullWidth
                     variant="standard"
                     label="File Size"
-                    value={sampleData.fileSize}
+                    name="fileSize"
+                    value={mediaData.fileSize}
+                    o
                   />
                 </Grid>
                 <Divider />
@@ -120,20 +150,9 @@ const EditMedia = () => {
                     fullWidth
                     variant="standard"
                     label="File URL"
-                    value={sampleData.filrUrl}
-                  />
-                </Grid>
-                <Grid item lg={6} md={6} sx={12}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="date"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    required
-                    label="Date"
-                    value={sampleData.filedate}
+                    name="fileUrl"
+                    value={mediaData.fileName}
+                    
                   />
                 </Grid>
               </Grid>
@@ -151,7 +170,7 @@ const EditMedia = () => {
         <Container maxWidth={false}>
           <Card mt={3}>
             <CardContent mt={3}>
-              <QRCodeGen />
+              <QRCodeGen url={mediaData.fileUrl}/>
             </CardContent>
             <Divider />
             <CardActions>

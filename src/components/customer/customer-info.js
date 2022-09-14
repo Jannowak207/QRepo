@@ -79,7 +79,8 @@ const CustomerInfo = () => {
                   alignItems: "center",
                 }}
               >
-                <Typography sx={{ mb: 0 }} variant="h4">
+                <Typography sx={{ mb: 0 }} 
+                variant="h4">
                   Customer Settings
                 </Typography>
                 <Button
@@ -95,11 +96,16 @@ const CustomerInfo = () => {
            
             <Divider/>
             <CardContent>
-              <Grid container spacing={3}>
-                <Grid item lg={12} md={12} xs={12}>
+              <Grid container 
+              spacing={3}>
+                <Grid item 
+                lg={12} 
+                md={12} 
+                xs={12}>
                   <Box>
                     <Box>
-                      <Tabs value={tabIndex} onChange={handleTabChange}>
+                      <Tabs value={tabIndex} 
+                      onChange={handleTabChange}>
                         <Tab label="Account" />
                         <Tab label="Password" />
                         <Tab label="Own short domain" />
@@ -111,8 +117,11 @@ const CustomerInfo = () => {
                     </Box>
                     <Box sx={{ padding: 2 }}>
                       {tabIndex === 0 && (
-                        <Grid container spacing={3}>
-                          <Grid item md={6} sx={12}>
+                        <Grid container 
+                        spacing={3}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please specify the name"
@@ -124,7 +133,9 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Email Address"
@@ -135,7 +146,9 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Phone number"
@@ -146,7 +159,9 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Registered on:"
@@ -157,7 +172,9 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={2} sx={6}>
+                          <Grid item 
+                          md={2} 
+                          sx={6}>
                             <TextField
                               fullWidth
                               label="Expiry date"
@@ -168,7 +185,9 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={4} sx={6}>
+                          <Grid item 
+                          md={4} 
+                          sx={6}>
                             <Button
                               color="secondary"
                               variant="contained"
@@ -177,7 +196,9 @@ const CustomerInfo = () => {
                               Add more time to your subscription
                             </Button>
                           </Grid>
-                          <Grid item md={5} sx={6}>
+                          <Grid item 
+                          md={5} 
+                          sx={6}>
                             <TextField
                               fullWidth
                               label="apiKey"
@@ -188,14 +209,20 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={1} sx={6}>
+                          <Grid item 
+                          md={1} 
+                          sx={6}>
                             <Box sx={{ alignItems: "center" }}>
-                              <Button color="secondary" variant="contained" onClick={handleCopy}>
+                              <Button color="secondary" 
+                              variant="contained" 
+                              onClick={handleCopy}>
                                 Copy
                               </Button>
                             </Box>
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="API request left"
@@ -206,10 +233,14 @@ const CustomerInfo = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={1} sx={6}>
+                          <Grid item 
+                          md={1} 
+                          sx={6}>
                             <Typography>Plan:</Typography>
                           </Grid>
-                          <Grid item md={5} sx={6}>
+                          <Grid item 
+                          md={5} 
+                          sx={6}>
                             <Select
                               fullWidth
                               value={changeMode}

@@ -70,7 +70,8 @@ const Managers = () => {
             root: {
               padding: "8px",
               // backgroundColor: "#CDCAC6",
-              border: "1px solid #CDCAC6",
+              borderBottom:"1px solid #CDCAC6",
+              cursor:"pointer",
             },
           },
         },
