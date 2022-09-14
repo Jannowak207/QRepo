@@ -32,7 +32,7 @@ const NotFound = () => (
             color="textPrimary"
             variant="h1"
           >
-            404: The page you are looking for isn't here
+            404: The page you are looking for isnt here
           </Typography>
           <Typography
             align="center"
