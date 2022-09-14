@@ -49,7 +49,7 @@ const Login = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
+          {/* <NextLink
             href="/dashboard"
             passHref
           >
@@ -59,7 +59,7 @@ const Login = () => {
             >
               Dashboard
             </Button>
-          </NextLink>
+          </NextLink> */}
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
@@ -68,15 +68,15 @@ const Login = () => {
               >
                 Sign in
               </Typography>
-              <Typography
+              {/* <Typography
                 color="textSecondary"
                 gutterBottom
                 variant="body2"
               >
                 Sign in on the internal platform
-              </Typography>
+              </Typography> */}
             </Box>
-            <Grid
+            {/* <Grid
               container
               spacing={3}
             >
@@ -126,7 +126,7 @@ const Login = () => {
               >
                 or login with email address
               </Typography>
-            </Box>
+            </Box> */}
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}
               fullWidth
