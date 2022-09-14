@@ -19,7 +19,7 @@ const App = (props) => {
        
       <Head>
         <title>
-          Material Kit Pro
+          QR Generator
         </title>
         <meta
           name="viewport"

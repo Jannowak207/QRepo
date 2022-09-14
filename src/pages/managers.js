@@ -20,16 +20,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 
 import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
 import { RouterOutlined } from "@mui/icons-material";
 import { DashboardLayout } from "../components/dashboard-layout";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const Managers = () => {
   const router = useRouter();
@@ -41,15 +37,6 @@ const Managers = () => {
     console.log("rowData:" + rowData);
     console.log("rowMeta:" + rowMeta);
     router.push("/edit/manager");
-  };
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   const columns = ["ID", "Name", "Email", "Address", "Phone", "CreatedAt"];
@@ -75,6 +62,27 @@ const Managers = () => {
     filterType: "checkbox",
     onRowClick: onRowClicked,
   };
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MuiTableCell: {
+          styleOverrides: {
+            root: {
+              padding: "8px",
+              // backgroundColor: "#CDCAC6",
+              border: "1px solid #CDCAC6",
+            },
+          },
+        },
+        MuiToolbar: {
+          styleOverrides: {
+            regular: {
+              minHeight: "8px",
+            },
+          },
+        },
+      },
+    });
 
   return (
     <>
@@ -101,62 +109,16 @@ const Managers = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={handleClickOpen}>
+                  <Button color="primary" variant="contained" onClick={onRowClicked}>
                     Add a manager
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add a manager</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                       
-                      </DialogContentText>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Name"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="email"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="address"
-                        label="Address"
-                        type="address"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="phone"
-                        label="Phone Number"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={handleClose}>Add</Button>
-                    </DialogActions>
-                  </Dialog>
                 </Box>
               </Box>
             </Grid>
             <Grid item xl={12} lg={12} sm={12} xs={12}>
-              <MUIDataTable title={"Customers"} data={data} columns={columns} options={options} />
+              <ThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable title={"Customers"} data={data} columns={columns} options={options} />
+              </ThemeProvider>
             </Grid>
           </Grid>
         </Container>

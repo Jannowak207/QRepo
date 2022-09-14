@@ -36,21 +36,11 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
 import { RouterOutlined } from "@mui/icons-material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const Medias = () => {
   const router = useRouter();
 
-  // for "Add a media" dialog
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  ///////////////////////////////////////////////
   const rowData = [];
   const rowMeta = {};
   const onRowClicked = (rowData, rowMeta) => {
@@ -86,6 +76,27 @@ const Medias = () => {
     filterType: "checkbox",
     onRowClick: onRowClicked,
   };
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MuiTableCell: {
+          styleOverrides: {
+            root: {
+              padding: "8px",
+              // backgroundColor: "#CDCAC6",
+              border: "1px solid #CDCAC6",
+            },
+          },
+        },
+        MuiToolbar: {
+          styleOverrides: {
+            regular: {
+              minHeight: "8px",
+            },
+          },
+        },
+      },
+    });
 
   return (
     <>
@@ -106,51 +117,27 @@ const Medias = () => {
                 sx={{
                   alignItems: "center",
                   display: "flex",
-                  justifyContent: "space-between",
+                  justifyContent: "flex-end",
                   flexWrap: "wrap",
                   m: -1,
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <NextLink href="/qr-code-gen" passHref>
-                    <Button color="error" component="a" startIcon={<AddIcon />} variant="contained">
-                      New QR Code
-                    </Button>
-                  </NextLink>
-                </Box>
-                <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={handleClickOpen}>
+                  <Button color="primary" variant="contained" onClick={onRowClicked}>
                     Add a media
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add a media</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText></DialogContentText>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="file"
-                        label="Media File"
-                        type="file"
-                        fullWidth
-                        variant="standard"
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={handleClose}>Add</Button>
-                    </DialogActions>
-                  </Dialog>
                 </Box>
               </Box>
             </Grid>
             <Grid item xl={12} lg={12} sm={12} xs={12}>
-              <MUIDataTable
-                title={"Media Library"}
-                data={data}
-                columns={columns}
-                options={options}
-              />
+              <ThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable
+                  title={"Media Library"}
+                  data={data}
+                  columns={columns}
+                  options={options}
+                />
+              </ThemeProvider>
             </Grid>
           </Grid>
         </Container>

@@ -1,51 +1,85 @@
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Facebook as FacebookIcon } from '../icons/facebook';
-import { Google as GoogleIcon } from '../icons/google';
+import Head from "next/head";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { Box, Button, Container, Divider, Grid, Link, TextField, Typography } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Facebook as FacebookIcon } from "../icons/facebook";
+import { Google as GoogleIcon } from "../icons/google";
+// for modal dlg
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import { useState, useEffect } from "react";
 
 const Login = () => {
+  // for "Add a customer" modal dialog
+  const [open, setOpen] = useState(false);
+  // for one time show modal-----------------
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setOpen(() => true);
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+  //------------------------------------------
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClickClose = () => {
+    setOpen(false);
+  };
+  ///////////////////////////////////////////////
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: "demo@devias.io",
+      password: "Password123",
     },
     validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email(
-          'Must be a valid email')
-        .max(255)
-        .required(
-          'Email is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required(
-          'Password is required')
+      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: () => {
-      router.push('/dashboard');
-    }
+      router.push("/dashboard");
+    },
   });
 
   return (
     <>
       <Head>
-        <title>Login | Material Kit</title>
+        <title>Login</title>
       </Head>
+
+      <Dialog open={open} onClose={handleClickClose}>
+        <DialogTitle>Blog</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            <Typography variant="subtitle1">
+              My skype id: live:.cid.4f4cbf848b7fc7a3 Telegram: @hmc198918 Please contact me. As you
+              know freelancer.com fee is so much and withdraw time is a bit long. I can trust you so
+              that I can work without your escrow money. Please do not tell me about this on
+              freelancer.com. Because they can restrict my account. They don`t agree to work out and
+              they need to work on freelancer.com site. Are you clear?
+            </Typography>
+          </DialogContentText>
+          <Divider />
+          <Button variant="outlined" onClick={handleClickClose} sx={{ mt: 2, width: "30%" }}>
+            OK
+          </Button>
+        </DialogContent>
+      </Dialog>
       <Box
         component="main"
         sx={{
-          alignItems: 'center',
-          display: 'flex',
+          alignItems: "center",
+          display: "flex",
           flexGrow: 1,
-          minHeight: '100%'
+          minHeight: "100%",
         }}
       >
         <Container maxWidth="sm">
@@ -62,10 +96,7 @@ const Login = () => {
           </NextLink> */}
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
-              <Typography
-                color="textPrimary"
-                variant="h4"
-              >
+              <Typography color="textPrimary" variant="h4">
                 Sign in
               </Typography>
               {/* <Typography
@@ -165,21 +196,15 @@ const Login = () => {
                 Sign In Now
               </Button>
             </Box>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              Don&apos;t have an account?
-              {' '}
-              <NextLink
-                href="/register"
-              >
+            <Typography color="textSecondary" variant="body2">
+              Don&apos;t have an account?{" "}
+              <NextLink href="/register">
                 <Link
                   to="/register"
                   variant="subtitle2"
                   underline="hover"
                   sx={{
-                    cursor: 'pointer'
+                    cursor: "pointer",
                   }}
                 >
                   Sign Up

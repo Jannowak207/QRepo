@@ -76,11 +76,11 @@ export const QRGenToolbar = (props) => {
     <Box {...props}>
       <Box
         sx={{
-          mt: 3,
+          mt: 1,
         }}
       >
-        <Card>
-          <Box
+        {/* <Card> */}
+        {/* <Box
             sx={{
               alignItems: "center",
               display: "flex",
@@ -88,27 +88,30 @@ export const QRGenToolbar = (props) => {
               flexWrap: "wrap",
               m: 1,
             }}
-          >
-            <Grid container spacing={3}>
-              <Grid item lg={6} md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start"></InputAdornment>,
-                  }}
-                  placeholder="https://www.mywebsite.com"
-                  variant="outlined"
-                  onChange={getInputUrl}
-                />
-              </Grid>
-              <Grid item lg={6} md={6} xs={12}>
-                <Button color="primary" variant="contained" onClick={onClickGenQR} sx={{ mt: 1 }}>
-                  Generate QR Code
-                </Button>
-              </Grid>
-            </Grid>
+          > */}
+
+        <Box sx={{
+            alignItems: "center",
+            display: "flex",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            m: 1,
+          }}>
+             <TextField
+              sx={{width:'60%'}}
+              InputProps={{
+                startAdornment: <InputAdornment position="start"></InputAdornment>,
+              }}
+              placeholder="https://www.mywebsite.com"
+              variant="outlined"
+              onChange={getInputUrl}
+            />
+             <Button color="primary" variant="contained" onClick={onClickGenQR} sx={{ mt: 0 }}>
+              Generate QR Code
+            </Button>
           </Box>
-          {/* <Divider />
+        {/* </Box> */}
+        {/* <Divider />
           <CardContent>
             <Grid container spacing={1}>
               <Grid item lg={6} md={6} xs={12}>
@@ -174,7 +177,7 @@ export const QRGenToolbar = (props) => {
             </Grid>
           </CardContent>
           <CardActions></CardActions> */}
-        </Card>
+        {/* </Card> */}
       </Box>
     </Box>
   );

@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { DashboardLayout } from "../components/dashboard-layout";
 import { customers } from "../__mocks__/customers";
+import styled from "styled-components";
 
 import { useState } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
@@ -16,21 +17,32 @@ import { format } from "date-fns";
 import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
 import { RouterOutlined } from "@mui/icons-material";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
 
 const Customers = () => {
   const router = useRouter();
-
-  // for "Add a customer" modal dialog
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  ///////////////////////////////////////////////
+  const getMuiTheme = () =>
+    createTheme({
+      components: {
+        MuiTableCell: {
+          styleOverrides: {
+            root: {
+              padding: "8px",
+              // backgroundColor: "#CDCAC6",
+              border:"1px solid #CDCAC6",
+            },
+          },
+        },
+        MuiToolbar: {
+          styleOverrides: {
+            regular: {
+              minHeight: "8px",
+            },
+          },
+        },
+      },
+    });
 
   const rowData = [];
   const rowMeta = {};
@@ -99,60 +111,17 @@ const Customers = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={handleClickOpen}>
+                  <Button color="primary" variant="contained" onClick={onRowClicked}>
                     Add a customer
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Add Customer</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText></DialogContentText>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Name"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="email"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="address"
-                        label="Address"
-                        type="address"
-                        fullWidth
-                        variant="standard"
-                      />
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="phone"
-                        label="Phone Number"
-                        type="number"
-                        fullWidth
-                        variant="standard"
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button onClick={handleClose}>Cancel</Button>
-                      <Button onClick={handleClose}>Save</Button>
-                    </DialogActions>
-                  </Dialog>
+  
                 </Box>
               </Box>
             </Grid>
             <Grid item xl={12} lg={12} sm={12} xs={12}>
-              <MUIDataTable title={"Customers"} data={data} columns={columns} options={options} />
+              <ThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable variatnt="standard" title={"Customers"} data={data} columns={columns} options={options} />
+              </ThemeProvider>
             </Grid>
           </Grid>
         </Container>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -7,63 +7,71 @@ import {
   CardHeader,
   Divider,
   Grid,
-  TextField
-} from '@mui/material';
+  TextField,
+} from "@mui/material";
+import { useRouter } from "next/router";
+import axios from 'axios';
+
+const serverUrl = ""
 
 const states = [
   {
-    value: 'alabama',
-    label: 'Alabama'
+    value: "alabama",
+    label: "Alabama",
   },
   {
-    value: 'new-york',
-    label: 'New York'
+    value: "new-york",
+    label: "New York",
   },
   {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
+    value: "san-francisco",
+    label: "San Francisco",
+  },
 ];
 
 export const AccountProfileDetails = (props) => {
+  const router = useRouter();
   const [values, setValues] = useState({
-    firstName: 'Katarina',
-    lastName: 'Smith',
-    email: 'demo@devias.io',
-    phone: '',
-    state: 'Alabama',
-    country: 'USA'
+    firstName: "Katarina",
+    lastName: "Smith",
+    email: "demo@devias.io",
+    phone: "",
+    state: "Alabama",
+    country: "USA",
+    currentPassword: "********",
+    newPassword: "",
+    confirmNewPassword: "",
   });
+  // for change account info: there is change if or not, if yes=>post req, no=> no post
+  const [changeCount, setChangeCount] = useState(0);
+
+  useEffect(() => {
+    console.log(values);
+    setChangeCount((c)=>c++)
+  }, [values]);
 
   const handleChange = (event) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
   };
-
+  const saveAccount = () => {
+    // post to the server routine
+    // if changeCount>0 =>post
+    // if(changeCount > 0) 
+    //   axios
+    //     .post()
+    router.push("/dashboard");
+  };
   return (
-    <form
-      autoComplete="off"
-      noValidate
-      {...props}
-    >
+    <form autoComplete="off" noValidate {...props}>
       <Card>
-        <CardHeader
-          subheader="The information can be edited"
-          title="My Profile"
-        />
+        <CardHeader subheader="The information can be edited" title="My Profile" />
         <Divider />
         <CardContent>
-          <Grid
-            container
-            spacing={3}
-          >
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+          <Grid container spacing={3}>
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 helperText="Please specify the first name"
@@ -75,11 +83,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Last name"
@@ -90,11 +94,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Email Address"
@@ -105,11 +105,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Phone Number"
@@ -120,11 +116,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Country"
@@ -135,11 +127,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               />
             </Grid>
-            <Grid
-              item
-              md={6}
-              xs={12}
-            >
+            <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
                 label="Select State"
@@ -152,10 +140,7 @@ export const AccountProfileDetails = (props) => {
                 variant="outlined"
               >
                 {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
+                  <option key={option.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
@@ -164,17 +149,53 @@ export const AccountProfileDetails = (props) => {
           </Grid>
         </CardContent>
         <Divider />
+        <CardHeader subheader="Change password here" title="My Password" />
+        <Divider />
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            p: 2
+            p: 3,
           }}
         >
-          <Button
-            color="primary"
-            variant="contained"
-          >
+          <TextField
+            fullWidth
+            label="Current Password"
+            name="currentPassword"
+            onChange={handleChange}
+            required
+            value={values.currentPassword}
+            variant="outlined"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="New Password"
+            name="newPassword"
+            onChange={handleChange}
+            required
+            value={values.newPassword}
+            variant="outlined"
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            fullWidth
+            label="Confirm New Password"
+            name="confirmNewPassword"
+            onChange={handleChange}
+            required
+            value={values.confirmNewPassword}
+            variant="outlined"
+          />
+        </Box>
+        <Divider />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            p: 2,
+            mr: 1,
+          }}
+        >
+          <Button color="primary" variant="contained" onClick={saveAccount}>
             Save details
           </Button>
         </Box>

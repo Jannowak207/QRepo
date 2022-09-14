@@ -17,6 +17,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useRouter } from "next/router";
+import QRCodeGen from "../../components/qr-code-gen";
 
 const EditMedia = () => {
   let date = new Date();
@@ -40,11 +41,11 @@ const EditMedia = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          py: 0,
+          py: 3,
         }}
       >
         <Container maxWidth={false}>
-          <Box
+          {/* <Box
             sx={{
               alignItems: "center",
               display: "flex",
@@ -66,9 +67,9 @@ const EditMedia = () => {
                 </Button>
               </NextLink>
             </Box>
-          </Box>
+          </Box> */}
           <Card>
-            <Typography variant="button" sx={{ m:3}}>
+            <Typography variant="h5" sx={{ m: 3 }}>
               Media Details
             </Typography>
             <Divider />
@@ -127,15 +128,30 @@ const EditMedia = () => {
                     autoFocus
                     margin="dense"
                     id="date"
-                    type="date"
+                    type="text"
                     fullWidth
-                    variant="outlined"
+                    variant="standard"
                     required
                     label="Date"
                     value={sampleData.filedate}
                   />
                 </Grid>
               </Grid>
+            </CardContent>
+          </Card>
+        </Container>
+      </Box>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 3,
+        }}
+      >
+        <Container maxWidth={false}>
+          <Card mt={3}>
+            <CardContent mt={3}>
+              <QRCodeGen />
             </CardContent>
             <Divider />
             <CardActions>
