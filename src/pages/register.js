@@ -210,7 +210,7 @@ const Register = () => {
               Have an account?
               {' '}
               <NextLink
-                href="/login"
+                href="/"
                 passHref
               >
                 <Link

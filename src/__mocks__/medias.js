@@ -1,6 +1,6 @@
 import { v4 as uuid } from 'uuid';
 
-export const products = [
+export const medias = [
   {
     id: uuid(),
     createdAt: '27/03/2019',

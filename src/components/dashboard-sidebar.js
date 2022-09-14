@@ -114,23 +114,7 @@ export const DashboardSidebar = (props) => {
               </a>
             </NextLink>
           </Box>
-          <Box sx={{ px: 2 }}>
-                <NextLink
-                  href="/qr-code-gen"
-                  passHref
-                >
-                  <Button
-                    color="error"
-                    component="a"
-                    startIcon={(<AddIcon />)}
-                    fullWidth
-                    sx={{ mt: 2 }}
-                    variant="contained"
-                  >
-                    New QR Code
-                  </Button>
-                </NextLink>
-          </Box>
+
         </div>
         <Divider
           sx={{

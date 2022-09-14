@@ -7,7 +7,7 @@ const NotFound = () => (
   <>
     <Head>
       <title>
-        404 | Material Kit
+        404 
       </title>
     </Head>
     <Box
@@ -32,7 +32,7 @@ const NotFound = () => (
             color="textPrimary"
             variant="h1"
           >
-            404: The page you are looking for isn’t here
+            404: The page you are looking for isn't here
           </Typography>
           <Typography
             align="center"
@@ -54,7 +54,7 @@ const NotFound = () => (
               }}
             />
           </Box>
-          <NextLink
+          {/* <NextLink
             href="/dashboard"
             passHref
           >
@@ -66,7 +66,7 @@ const NotFound = () => (
             >
               Go back to dashboard
             </Button>
-          </NextLink>
+          </NextLink> */}
         </Box>
       </Container>
     </Box>

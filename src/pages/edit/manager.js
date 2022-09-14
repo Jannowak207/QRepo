@@ -1,3 +1,5 @@
+import CustomerInfo from "src/components/customer/customer-info";
+import { DashboardLayout } from "../../components/dashboard-layout";
 import Head from "next/head";
 import {
   Box,
@@ -17,11 +19,9 @@ import {
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import { DashboardLayout } from "../dashboard-layout";
 import { useRouter } from "next/router";
 import { useState } from "react";
-
-const CustomerInfo = () => {
+const EditManager = () => {
   const router = useRouter();
   const [values, setValues] = useState({
     name: "Afrim Bunjaku",
@@ -42,7 +42,7 @@ const CustomerInfo = () => {
   };
   const handleClick = (event) => {
     // save routine
-    router.push("/customers");
+    router.push("/managers");
   };
   const handleChange = (event) => {
     //change routine
@@ -53,14 +53,14 @@ const CustomerInfo = () => {
   const handleAddMoreTime = (event) => {
     // add more time to your subscription routine
   };
-  const handleDeleteAccount = (event) => {
-    // account delete routine
-    router.push('/customers');
+  const handleDeleteManager = (event) => {
+    // manager delete routine
+    router.push('/managers')
   };
   return (
     <>
       <Head>
-        <title>Customer</title>
+        <title>Manager Edit</title>
       </Head>
       <Box
         component="main"
@@ -71,42 +71,37 @@ const CustomerInfo = () => {
       >
         <Container maxWidth="lg">
           <Card>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 2,
-                  alignItems: "center",
-                }}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                p: 2,
+                alignItems: "center",
+              }}
+            >
+              <Typography sx={{ mb: 0 }} variant="h4">
+                Manager Settings
+              </Typography>
+              <Button
+                color="error"
+                variant="contained"
+                onClick={handleDeleteManager}
+                size="small"
+                sx={{ height: 30 }}
               >
-                <Typography sx={{ mb: 0 }} variant="h4">
-                  Customer Settings
-                </Typography>
-                <Button
-                  color="error"
-                  variant="contained"
-                  onClick={handleDeleteAccount}
-                  size="small"
-                  sx={{ height: 30 }}
-                >
-                  Delete your account
-                </Button>
-              </Box>
-           
-            <Divider/>
+                Delete manager
+              </Button>
+            </Box>
+
+            <Divider />
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item lg={12} md={12} xs={12}>
                   <Box>
                     <Box>
                       <Tabs value={tabIndex} onChange={handleTabChange}>
-                        <Tab label="Account" />
+                        <Tab label="Profile" />
                         <Tab label="Password" />
-                        <Tab label="Own short domain" />
-                        <Tab label="Language" />
-                        <Tab label="Integrations" />
-                        <Tab label="Invoice" />
-                        <Tab label="Email preferences" />
                       </Tabs>
                     </Box>
                     <Box sx={{ padding: 2 }}>
@@ -156,71 +151,6 @@ const CustomerInfo = () => {
                               value={values.registeredOn}
                               variant="outlined"
                             />
-                          </Grid>
-                          <Grid item md={2} sx={6}>
-                            <TextField
-                              fullWidth
-                              label="Expiry date"
-                              name="expiryDate"
-                              onChange={handleChange}
-                              required
-                              value={values.expiryDate}
-                              variant="outlined"
-                            />
-                          </Grid>
-                          <Grid item md={4} sx={6}>
-                            <Button
-                              color="secondary"
-                              variant="contained"
-                              onClick={handleAddMoreTime}
-                            >
-                              Add more time to your subscription
-                            </Button>
-                          </Grid>
-                          <Grid item md={5} sx={6}>
-                            <TextField
-                              fullWidth
-                              label="apiKey"
-                              name="apiKey"
-                              onChange={handleChange}
-                              required
-                              value={values.apiKey}
-                              variant="outlined"
-                            />
-                          </Grid>
-                          <Grid item md={1} sx={6}>
-                            <Box sx={{ alignItems: "center" }}>
-                              <Button color="secondary" variant="contained" onClick={handleCopy}>
-                                Copy
-                              </Button>
-                            </Box>
-                          </Grid>
-                          <Grid item md={6} sx={12}>
-                            <TextField
-                              fullWidth
-                              label="API request left"
-                              name="apiRequestLeft"
-                              onChange={handleChange}
-                              required
-                              value={values.apiRequestLeft}
-                              variant="outlined"
-                            />
-                          </Grid>
-                          <Grid item md={1} sx={6}>
-                            <Typography>Plan:</Typography>
-                          </Grid>
-                          <Grid item md={5} sx={6}>
-                            <Select
-                              fullWidth
-                              value={changeMode}
-                              defaultValue={changeMode}
-                              onChange={(event) => setChangeMode(event.target.value)}
-                              displayEmpty
-                              inputProps={{ "aria-label": "Without label" }}
-                            >
-                              <MenuItem value={1}>{values.plan[0]}</MenuItem>
-                              <MenuItem value={2}>{values.plan[1]}</MenuItem>
-                            </Select>
                           </Grid>
                         </Grid>
                       )}
@@ -279,37 +209,12 @@ const CustomerInfo = () => {
                           </Grid>
                         </Box>
                       )}
-                      {tabIndex === 2 && (
-                        <Box>
-                          <Typography>The third tab</Typography>
-                        </Box>
-                      )}
-                      {tabIndex === 3 && (
-                        <Box>
-                          <Typography>The forth tab</Typography>
-                        </Box>
-                      )}
-                      {tabIndex === 4 && (
-                        <Box>
-                          <Typography>The fifth tab</Typography>
-                        </Box>
-                      )}
-                      {tabIndex === 5 && (
-                        <Box>
-                          <Typography>The sixth tab</Typography>
-                        </Box>
-                      )}
-                      {tabIndex === 6 && (
-                        <Box>
-                          <Typography>The seventh tab</Typography>
-                        </Box>
-                      )}
                     </Box>
                   </Box>
                 </Grid>
               </Grid>
             </CardContent>
-            <Divider/>
+            <Divider />
             <CardActions>
               <Box
                 sx={{
@@ -330,6 +235,5 @@ const CustomerInfo = () => {
   );
 };
 
-CustomerInfo.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
-
-export default CustomerInfo;
+EditManager.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
+export default EditManager;
