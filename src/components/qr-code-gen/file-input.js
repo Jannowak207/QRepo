@@ -11,13 +11,16 @@ import {
 } from '@mui/material';
 import { useState, useEffect } from 'react';
 
-const FileInput = () => {
+const FileInput = (props) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
     if (selectedImage) {
-      setImageUrl(URL.createObjectURL(selectedImage));
+      let imgUrl = URL.createObjectURL(selectedImage)
+      setImageUrl(imgUrl);
+      props.parentCallback(imgUrl)
+      console.log("logo changed.")
     }
   }, [selectedImage]);
 

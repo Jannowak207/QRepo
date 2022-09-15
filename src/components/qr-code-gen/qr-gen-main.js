@@ -16,29 +16,46 @@ import { QRCode } from "react-qrcode";
 import { useQRCode } from "react-qrcode";
 
 export const QRGenMain = (props) => {
-  const [checked, setChecked] = useState(false);
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
-  const fileUrl =props.url;
-  const [value, setValue] = useState("https://www.1stg.me");
-  useEffect( () => {
-    setValue(fileUrl)
-  },[])
-  const opt = {
-    width: 400,
+  // const [checked, setChecked] = useState(false);
+  // const handleChange = (event) => {
+  //   setChecked(event.target.checked);
+  // };
+
+  // const fileUrl =props.url;
+
+  // const [value, setValue] = useState("https://www.1stg.me");
+
+  const [opt, setOpt] = useState({
+    width: 600,
     margin: 2,
     color: {
       dark: "#ff0000ff", //bgcolor
       light: "#00FFFFFF", //background-color
     },
-    value: value,
-  };
-  const dataUrl = useQRCode(opt);
+    value: props.url,
+  });
+
+  const [qrRes, setQRes] = useState("")
+
+  let dataUrl = useQRCode(opt);
+
+  useEffect(() => {
+    setQRes(dataUrl);
+  }, [opt]);
+
+  // const opt = {
+  //   width: 400,
+  //   margin: 2,
+  //   color: {
+  //     dark: "#ff0000ff", //bgcolor
+  //     light: "#00FFFFFF", //background-color
+  //   },
+  //   value: value,
+  // };
 
   return (
     <Card>
-      <CardContent>
+      {/* <CardContent>
         <Grid container spacing={0} direction="column" alignItems="center">
           {props.qrRes && (
             <Box
@@ -51,23 +68,23 @@ export const QRGenMain = (props) => {
             />
           )}
         </Grid>
-      </CardContent>
-      <Divider />
-      <Box
+      </CardContent> */}
+      {/* <Divider /> */}
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "flex-end",
           p: 2,
         }}
       >
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
+        <Grid container spacing={1}> */}
+      {/* <Grid item xs={12}>
             <FormControlLabel
               control={<Checkbox checked={checked} onChange={handleChange} />}
               label="Save as a template"
             />
-          </Grid>
-          <Grid item xs={6}>
+          </Grid> */}
+      {/* <Grid item xs={6}>
             <Button
               color="success"
               href={props.qrRes}
@@ -79,8 +96,8 @@ export const QRGenMain = (props) => {
             >
               Save
             </Button>
-          </Grid>
-          <Grid item xs={6}>
+          </Grid> */}
+      {/* <Grid item xs={6}>
             <Button
               color="success"
               variant="contained"
@@ -90,15 +107,17 @@ export const QRGenMain = (props) => {
             >
               Email Me
             </Button>
-          </Grid>
-        </Grid>
-      </Box>
+          </Grid> */}
+      {/* </Grid>
+      </Box> */}
 
-
-
-      <div>dataUrl: {dataUrl}</div>
+      {/* <div>dataUrl: {dataUrl}</div>
       <img src={dataUrl} />
-      <input onChange={(e) => setValue(e.currentTarget.value)} />
+      <input onChange={(e) => setValue(e.currentTarget.value)} /> */}
+      <div>dataUrl: {props.url}</div>
+      <div>dataUrl: {qrRes}</div>
+      <img src={dataUrl} />
+      {/* <input onChange={(e) => setValue(e.currentTarget.value)} /> */}
       <Button
         color="success"
         href={dataUrl}

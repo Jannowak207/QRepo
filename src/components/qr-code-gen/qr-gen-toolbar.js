@@ -23,56 +23,56 @@ import QRCode from "qrcode";
 import { blue, red } from "@mui/material/colors";
 
 export const QRGenToolbar = (props) => {
-  console.log("QR toolbar here:props:"+props)
-  console.log("url"+props.url)
-  const [url, setUrl] = useState("");
-  const [qr, setQr] = useState("");
+  // console.log("QR toolbar here:props:"+props)
+  // console.log("url"+props.url)
+  // const [url, setUrl] = useState("");
+  // const [qr, setQr] = useState("");
 
   // variable and handler for "Save as a template" check box
-  const [checked, setChecked] = useState(false);
-  const handleChange = (event) => {
-    setChecked(event.target.checked);
-  };
+  // const [checked, setChecked] = useState(false);
+  // const handleChange = (event) => {
+  //   setChecked(event.target.checked);
+  // };
   //---------------------------------------------------------
-  const GenerateQRCode = () => {
-    QRCode.toDataURL(
-      url,
-      {
-        width: 600,
-        margin: 2,
-        qrOptions: {
-          typeNumber: 0,
-          mode: "Byte",
-          // backgroundColor:"red",
-          // foregroundColor:"blue",
-        },
-        dotsOptions: {
-          type: "rounded",
-          gradient: true,
-        },
-        color: {
-          dark: "#ff0000FF",
-          light: "#001234FF",
-        },
-      },
-      (err, url) => {
-        if (err) return console.error(err);
-        //setQr(url)//not read
-        qr = url;
-      }
-    );
-  };
+  // const GenerateQRCode = () => {
+  //   QRCode.toDataURL(
+  //     url,
+  //     {
+  //       width: 600,
+  //       margin: 2,
+  //       qrOptions: {
+  //         typeNumber: 0,
+  //         mode: "Byte",
+  //         // backgroundColor:"red",
+  //         // foregroundColor:"blue",
+  //       },
+  //       dotsOptions: {
+  //         type: "rounded",
+  //         gradient: true,
+  //       },
+  //       color: {
+  //         dark: "#ff0000FF",
+  //         light: "#001234FF",
+  //       },
+  //     },
+  //     (err, url) => {
+  //       if (err) return console.error(err);
+  //       //setQr(url)//not read
+  //       qr = url;
+  //     }
+  //   );
+  // };
 
-  const onClickGenQR = () => {
-    // props.parentCallback(url);
-    //here qr code generation routin with qrcode module
-    GenerateQRCode();
-    props.parentCallback(qr);
-  };
+  // const onClickGenQR = () => {
+  //   // props.parentCallback(url);
+  //   //here qr code generation routin with qrcode module
+  //   GenerateQRCode();
+  //   props.parentCallback(qr);
+  // };
 
-  const getInputUrl = (e) => {
-    setUrl(e.target.value);
-  };
+  // const getInputUrl = (e) => {
+  //   setUrl(e.target.value);
+  // };
 
   return (
     <Box {...props}>
@@ -92,7 +92,7 @@ export const QRGenToolbar = (props) => {
               m: 1,
             }}
           > */}
-
+{/* 
         <Box sx={{
             alignItems: "center",
             display: "flex",
@@ -112,7 +112,7 @@ export const QRGenToolbar = (props) => {
              <Button color="primary" variant="contained" onClick={onClickGenQR} sx={{ mt: 0 }}>
               Generate QR Code
             </Button>
-          </Box>
+          </Box> */}
         {/* </Box> */}
         {/* <Divider />
           <CardContent>

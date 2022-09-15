@@ -40,7 +40,7 @@ const user = {
 
 export const QRGenOptions = (props) => {
   const [expanded, setExpanded] = useState(false);
-  const handleChange = (panel) => (event, isExpanded) => {
+  const handleAccordianChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -103,7 +103,7 @@ export const QRGenOptions = (props) => {
         <Typography sx={{ ml: 2,mb:2 }} variant="h6">
             Options
           </Typography>
-          <Accordion expanded={expanded === "panel1"} onChange={handleChange("panel1")}>
+          <Accordion expanded={expanded === "panel1"} onChange={handleAccordianChange("panel1")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1bh-content"
@@ -123,7 +123,7 @@ export const QRGenOptions = (props) => {
               ))}
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === "panel2"} onChange={handleChange("panel2")}>
+          <Accordion expanded={expanded === "panel2"} onChange={handleAccordianChange("panel2")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel2bh-content"
@@ -150,7 +150,7 @@ export const QRGenOptions = (props) => {
               ))}
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === "panel3"} onChange={handleChange("panel3")}>
+          <Accordion expanded={expanded === "panel3"} onChange={handleAccordianChange("panel3")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel3bh-content"
@@ -163,7 +163,7 @@ export const QRGenOptions = (props) => {
               <FileInput />
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === "panel4"} onChange={handleChange("panel4")}>
+          <Accordion expanded={expanded === "panel4"} onChange={handleAccordianChange("panel4")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel4bh-content"
@@ -176,7 +176,7 @@ export const QRGenOptions = (props) => {
               <SetColor />
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === "panel5"} onChange={handleChange("panel5")}>
+          <Accordion expanded={expanded === "panel5"} onChange={handleAccordianChange("panel5")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel5bh-content"
@@ -191,7 +191,7 @@ export const QRGenOptions = (props) => {
               ))}
             </AccordionDetails>
           </Accordion>
-          <Accordion expanded={expanded === "panel6"} onChange={handleChange("panel6")}>
+          <Accordion expanded={expanded === "panel6"} onChange={handleAccordianChange("panel6")}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel6bh-content"
