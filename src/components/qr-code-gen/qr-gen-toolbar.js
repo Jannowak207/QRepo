@@ -15,7 +15,7 @@ import { Checkbox, FormControlLabel } from "@mui/material";
 import { Search as SearchIcon } from "../../icons/search";
 import { Upload as UploadIcon } from "../../icons/upload";
 import { Download as DownloadIcon } from "../../icons/download";
-import { QRCodeCanvas } from "qrcode.react";
+
 
 import { useState, useEffect } from "react";
 
@@ -81,7 +81,7 @@ export const QRGenToolbar = (props) => {
           mt: 1,
         }}
       >
-        {props.url && <QRCodeCanvas value={props.url} />}
+
         {/* <Card> */}
         {/* <Box
             sx={{

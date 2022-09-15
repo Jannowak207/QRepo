@@ -40,7 +40,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useRouter } from "next/router";
 import QRCodeGen from "../../components/qr-code-gen";
-import { QRCodeCanvas } from "qrcode.react";
+
 import QRCodeStyling, { dotTypes } from "qr-code-styling";
 import { useState, useEffect, useRef } from "react";
 
@@ -480,7 +480,7 @@ const EditMedia = () => {
                   </Accordion> */}
                 </Grid>
                 <Grid item lg={6} md={6} sx={12}>
-                  {/* <QRCodeCanvas value={mediaData.fileUrl} /> */}
+
                   {/* for qr code---------------------------------------------------------------------- */}
                   <Grid container spacing={0} direction="column" alignItems="center">
                     <Grid item lg={12} md={12} sx={12}>

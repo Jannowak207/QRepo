@@ -36,8 +36,6 @@
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "qr-code-styling": "^1.6.0-rc.1",
-    "qrcode": "^1.5.1",
-    "qrcode.react": "^3.1.0",
     "react": "^17.0.2",
     "react-chartjs-2": "^3.0.4",
     "react-color": "^2.19.3",
