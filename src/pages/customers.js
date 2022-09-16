@@ -20,97 +20,88 @@ import { RouterOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
 import CustomerInfo from "src/components/customer/customer-info";
-import axios from 'axios';
+import axios from "axios";
 import { baseUrl } from "src/config";
 
-const customerServerUrl = `${baseUrl}/admin/customer`
+const customerServerUrl = `${baseUrl}/admin/customer`;
 
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MuiTableCell: {
-          styleOverrides: {
-            root: {
-              padding: "8px",
-              // backgroundColor: "#CDCAC6",
-              borderBottom:"1px solid #CDCAC6",
-              cursor:"pointer",
-            },
-          },
-        },
-        MuiToolbar: {
-          styleOverrides: {
-            regular: {
-              minHeight: "8px",
-            },
+const getMuiTheme = () =>
+  createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: "8px",
+            // backgroundColor: "#CDCAC6",
+            borderBottom: "1px solid #CDCAC6",
+            cursor: "pointer",
           },
         },
       },
-    });
+      MuiToolbar: {
+        styleOverrides: {
+          regular: {
+            minHeight: "8px",
+          },
+        },
+      },
+    },
+  });
 
 const Customers = () => {
-
   const router = useRouter();
-  const [rowData, setRowData] = useState({})
+  const [rowData, setRowData] = useState({});
   const onRowClicked = (rowData, rowMeta) => {
     //row click routine
     // console.log("row clicked.");
     // console.log("rowData:" + rowData);
     // console.log("rowMeta:" + rowMeta);
     //router.push("/edit/customer");
-    setRowData(rowData)
-    setStatusAddEdit(true)//show edit component
+    setRowData(rowData);
+    setStatusAddEdit(true); //show edit component
   };
-  const showCustomersTable = () =>{
-    setStatusAddEdit(false)
+  const showCustomersTable = () => {
+    setStatusAddEdit(false);
+  };
+
+  const columns = ["plan", "apiLeft", "_id", "firstname", "lastname", "phone_number", "email", "password","created-at","__V"];
+  const [tabledata,settabledata] = useState([]);
+  useEffect(()=>{
+    console.log("mounted")
+    getCustomerList()
+  },[])
+  const getCustomerList = () => {
+    axios.get(`${customerServerUrl}/list`,{
+      params:{
+        key:[],
+        pageNumber:0,
+        sort:"created_at",
+      }
+    }).then(res => {
+      console.log("res data:",res.data)
+      settabledata(res.data)
+    }).catch(err => {
+      console.log(err)
+    })
   }
-
-
-  const columns = ["ID", "Name", "Email", "Address", "Phone", "CreatedAt"];
-  const data = [
-    [
-      "1",
-      "Ekaterina Tankova",
-      "ekaterina.tankova@devias.io",
-      "West Virginia",
-      "304-428-3097",
-      "9-1-2022",
-    ],
-    ["2", "Cao Yu", "cao.yu@devias.io", "California", "712-351-5711", "9-1-2022"],
-    ["3", "Alexa Richardson", "alexa.richardson@devias.io", "Georgia", "770-635-2682", "5-1-2000"],
-    ["4", "Anje Keizer", "anje.keizer@devias.io", "Ohio", "908-691-3242", "9-1-2022"],
-    ["5", "Clarke Gillebert", "clarke.gillebert@devias.io", "Texas", "972-333-4106", "9-8-2017"],
-    ["6", "Adam Denisov", "adam.denisov@devias.io", "California", "858-602-3409", "9-18-2019"],
-    ["7", "Ava Gregoraci", "ava.gregoraci@devias.io", "California", "415-907-2647", "7-1-2019"],
-    ["8", "Emilee Simchenko", "emilee.simchenko@devias.io", "Nevada", "702-661-1654", "8-1-2015"],
-    ["9", "Kwak Seong-Min", "kwak.seong.min@devias.io", "Michigan", "313-812-8947", "6-15-2012"],
-    ["2", "Cao Yu", "cao.yu@devias.io", "California", "712-351-5711", "9-1-2022"],
-    ["3", "Alexa Richardson", "alexa.richardson@devias.io", "Georgia", "770-635-2682", "5-1-2000"],
-    ["4", "Anje Keizer", "anje.keizer@devias.io", "Ohio", "908-691-3242", "9-1-2022"],
-    ["5", "Clarke Gillebert", "clarke.gillebert@devias.io", "Texas", "972-333-4106", "9-8-2017"],
-    ["6", "Adam Denisov", "adam.denisov@devias.io", "California", "858-602-3409", "9-18-2019"],
-    ["7", "Ava Gregoraci", "ava.gregoraci@devias.io", "California", "415-907-2647", "7-1-2019"],
-    ["8", "Emilee Simchenko", "emilee.simchenko@devias.io", "Nevada", "702-661-1654", "8-1-2015"],
-    ["9", "Kwak Seong-Min", "kwak.seong.min@devias.io", "Michigan", "313-812-8947", "6-15-2012"],
-  ];
   const options = {
     filterType: "checkbox",
     onRowClick: onRowClicked,
     // selectableRowsOnClick:true,
   };
- 
-  const [statusAddEdit,setStatusAddEdit] = useState(false)//true:add & edit component show
+
+  const [statusAddEdit, setStatusAddEdit] = useState(false); //true:add & edit component show
   const onAddButtonClicked = () => {
-    setRowData(null)
-    setStatusAddEdit(true)
-  }
+    setRowData(null);
+    setStatusAddEdit(true);
+  };
 
   return (
     <>
       <Head>
         <title>Customers</title>
       </Head>
-      {!statusAddEdit && 
+      {!statusAddEdit && (
         <Box
           component="main"
           sx={{
@@ -139,14 +130,20 @@ const Customers = () => {
               </Grid>
               <Grid item xl={12} lg={12} sm={12} xs={12}>
                 <ThemeProvider theme={getMuiTheme()}>
-                  <MUIDataTable variatnt="standard" title={"Customers"} data={data} columns={columns} options={options} />
+                  <MUIDataTable
+                    variatnt="standard"
+                    title={"Customers"}
+                    data={tabledata}
+                    columns={columns}
+                    options={options}
+                  />
                 </ThemeProvider>
               </Grid>
             </Grid>
           </Container>
         </Box>
-      }
-      {statusAddEdit && <CustomerInfo parentCallback={showCustomersTable} data={rowData}/>}
+      )}
+      {statusAddEdit && <CustomerInfo parentCallback={showCustomersTable} data={rowData} />}
     </>
   );
 };
