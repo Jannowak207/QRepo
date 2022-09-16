@@ -29,11 +29,11 @@ const items = [
     title: 'Media Library'
   },
 
-  {
-    href: '/managers',
-    icon: (<CogIcon fontSize="small" />),
-    title: 'Managers'
-  },
+  // {
+  //   href: '/managers',
+  //   icon: (<CogIcon fontSize="small" />),
+  //   title: 'Managers'
+  // },
   {
     href: '/account',
     icon: (<UserIcon fontSize="small" />),

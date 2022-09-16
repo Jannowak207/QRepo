@@ -61,12 +61,7 @@ const qrCode = new QRCodeStyling({
 // end for qr code
 
 const EditMedia = () => {
-  const [qrColors, setQRColors] = useState({
-    backColor: "#ffffff",
-    dotColor: "#000000",
-    eyeDotColor: "#000000",
-    eyeSquareColor: "#000000",
-  });
+  
   //for download type
   const [changeMode, setChangeMode] = useState("1");
 
@@ -79,11 +74,11 @@ const EditMedia = () => {
   // for qr code------------------------------------------------------------------------------
   const [url, setUrl] = useState("https://qr-code-styling.com"); // file url update
   const [dotType, setDotType] = useState("rounded");
-  const [dotColor, setDotColor] = useState("#ff0000");
+  const [dotColor, setDotColor] = useState("#000000");
   const [eyeType, setEyeType] = useState("dot");
-  const [eyeDotColor, setEyeDotColor] = useState("#0000ff");
-  const [eyeSquareColor, setEyeSqureColor] = useState("#00ff00");
-  const [backColor, setBackColor] = useState("#dddddd");
+  const [eyeDotColor, setEyeDotColor] = useState("#000000");
+  const [eyeSquareColor, setEyeSqureColor] = useState("#000000");
+  const [backColor, setBackColor] = useState("#ffffff");
   const [logoImage, setLogo] = useState(
     "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
   );
@@ -104,9 +99,25 @@ const EditMedia = () => {
       cornersSquareOptions: { type: eyeType[1], color: eyeSquareColor },
       backgroundOptions: { color: backColor },
     });
-    console.log("logo !!!!!!!:" + logoImage);
+ 
+    console.log("dotColor:"+dotColor)
+    console.log("backColor:"+backColor)
+    console.log("eyeDotColor:"+eyeDotColor)
+    console.log("eyeSquareColor:"+eyeSquareColor)
+    
   }, [url, dotType, eyeType, logoImage, dotColor, eyeDotColor, eyeSquareColor, backColor]);
-
+  useEffect(()=>{
+    console.log("dotColor changed.")
+  },[dotColor])
+  useEffect(()=>{
+    console.log("eyeDotColor changed.")
+  },[eyeDotColor])
+  useEffect(()=>{
+    console.log("eyeSquareColor changed.")
+  },[eyeSquareColor])
+  useEffect(()=>{
+    console.log("backColor changed.")
+  },[backColor])
   const onSetDotType = (e) => {
     setDotType(e.target.value);
     if(e.target.alt)
@@ -121,17 +132,22 @@ const EditMedia = () => {
     console.log("logo received.");
     setLogo(logoImg);
     logoImage = logoImg;
-    console.log("received logo:" + logoImg);
+    // console.log("received logo:" + logoImg);
   };
   const onSetQRColors = (colors) => {
+
     if (colors) {
-      setQRColors(colors);
-      qrColors = colors;
-      setDotColor(colors.dotColor);
-      setBackColor(colors.backColor);
-      setEyeDotColor(colors.eyeDotColor);
-      setEyeSqureColor(colors.eyeSquareColor);
+      dotColor = colors[1];
+      setDotColor(colors[1]);
+      backColor = colors[0];
+      setBackColor(colors[0]);
+      eyeDotColor = colors[2];
+      setEyeDotColor(colors[2]);
+      eyeSquareColor = colors[3];
+      setEyeSqureColor(colors[3]);    
+      console.log("recev:"+backColor+" "+dotColor+" "+eyeDotColor+" "+eyeSquareColor)   
     }
+
   };
   const onUrlChange = (event) => {
     event.preventDefault();

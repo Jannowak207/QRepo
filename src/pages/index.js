@@ -19,12 +19,12 @@ const Login = () => {
   // for "Add a customer" modal dialog
   const [open, setOpen] = useState(false);
   // for one time show modal-----------------
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      setOpen(() => true);
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, []);
+  // useEffect(() => {
+  //   let timer = setTimeout(() => {
+  //     setOpen(() => true);
+  //   }, 1000);
+  //   return () => clearTimeout(timer);
+  // }, []);
   //------------------------------------------
   const handleClickOpen = () => {
     setOpen(true);
