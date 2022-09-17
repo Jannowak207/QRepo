@@ -30,7 +30,7 @@ const EditCutomer = (props) => {
   const customerDelUrl = `${baseUrl}/admin/customer/delete`;
   const customerGetOneUrl = `${baseUrl}/admin/customer/one`;
   const router = useRouter();
-  
+
   // _id received previous page for edit or delete actions
   //const { customerId } = router.query
   //const { customerId } = props.match.state
@@ -39,25 +39,25 @@ const EditCutomer = (props) => {
 
   // get selected customer details data from server when mounted this page
   useEffect(() => {
-   
     axios
-    .get(customerGetOneUrl,{
-      params:{
-        "_id":router.query.id
-      }
-    })
-    .then( res => {
-      if(res.data){
-        console.log("one data;",res.data)
-       // values = res.data;
-        setValues(res.data);
-      }
-    })
-    .catch(err => {
-      console.log(err)
-    })
+      .get(customerGetOneUrl, {
+        params: {
+          _id: router.query.id,
+        },
+      })
+      .then((res) => {
+        if (res.data) {
+          console.log("one data;", res.data);
+          // values = res.data;
+          setValues(res.data);
+          setValuesTemp(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     console.log("here:", router.query);
-  },[router.query])
+  }, [router.query]);
 
   //for edit request to server
   const EditCustomer = (customer) => {
@@ -74,17 +74,17 @@ const EditCutomer = (props) => {
   const DeleteCustomer = () => {
     // need id for del
     axios
-      .get(`${customerDelUrl}`,{
-        params:{
-          "_id":router.query.id,
-        }
+      .get(`${customerDelUrl}`, {
+        params: {
+          _id: router.query.id,
+        },
       })
-      .then(res=>{
-        console.log("delete success.")
+      .then((res) => {
+        //console.log("delete success.")
       })
-      .catch(err => {
-        console.log(err)
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // for edit customer data
@@ -100,7 +100,21 @@ const EditCutomer = (props) => {
     created_at: "",
     __v: 0,
   });
-
+  // temp for compare with original
+  const [valuesTemp, setValuesTemp] = useState({
+    plan: 0, // 0:standard,1:premium
+    apiLeft: 0,
+    _id: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
+    password: "",
+    created_at: "",
+    __v: 0,
+  });
+  //for validate
+  const [noChange, setNoChange] = useState(false);
   //for tab
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (event, newTabIndex) => {
@@ -110,18 +124,23 @@ const EditCutomer = (props) => {
   // for edit save btn clicked
   const handleSaveClick = (event) => {
     // save routine
-    let editData = {
-      id: values._id,
-      plan: values.plan,
-      apiLeft: values.apiLeft,
-      first_name: values.first_name,
-      last_name: values.last_name,
-      phone_number: values.phone_number,
-      email: values.email,
-      password: values.password,
-    };
-    EditCustomer(editData);
-    router.push("/customers");
+    //validate
+    if (values == valuesTemp) {
+      setNoChange(true);
+    } else {
+      let editData = {
+        id: values._id,
+        plan: values.plan,
+        apiLeft: values.apiLeft,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        phone_number: values.phone_number,
+        email: values.email,
+        password: values.password,
+      };
+      EditCustomer(editData);
+      router.push("/customers");
+    }
   };
 
   //for input fields
@@ -141,9 +160,9 @@ const EditCutomer = (props) => {
   };
 
   //for cancel
-  const handleCancelClick = () =>{
-    router.push('/customers')
-  }
+  const handleCancelClick = () => {
+    router.push("/customers");
+  };
 
   return (
     <>
@@ -183,6 +202,13 @@ const EditCutomer = (props) => {
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
+                {noChange && (
+                  <Grid item lg={12} md={12} sx={12}>
+                    <Typography color="error" sx={{ ml: 2 }}>
+                      No changes
+                    </Typography>
+                  </Grid>
+                )}
                 <Grid item lg={12} md={12} xs={12}>
                   <Box>
                     <Box>
@@ -324,12 +350,14 @@ const EditCutomer = (props) => {
               </Grid>
             </CardContent>
             <Divider />
-            <CardActions>
-              <Box
+
+            <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "flex-start",
+                  justifyContent: "space-between",
                   p: 2,
+                  ml:3,
+                  mr:3,
                 }}
               >
                 <Button color="success" variant="contained" onClick={handleSaveClick}>
@@ -339,7 +367,6 @@ const EditCutomer = (props) => {
                   Cancel
                 </Button>
               </Box>
-            </CardActions>
           </Card>
         </Container>
       </Box>

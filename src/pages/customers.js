@@ -58,24 +58,46 @@ const Customers = (props) => {
   const [rowData, setRowData] = useState({});
   //for one customer detail data from server
   const onRowClicked = (rowData, rowMeta) => {
+    const first_name = rowData[0];
 
     router.push({
       pathname: "/edit/customer",
-      query: { id: rowData[2] },
+      query: { id: rowData[0] },
     });
   };
 
   const columns = [
-    "plan",
-    "apiLeft",
-    "_id",
-    "firstname",
-    "lastname",
-    "phone_number",
-    "email",
-    "password",
-    "created-at",
-    "__V",
+    //"plan",
+    //"apiLeft",
+    {
+      label: "ID",
+      name: "_id",
+      options:{
+        display:false
+      }
+    },
+    {
+      label: "First Name",
+      name: "first_name",
+    },
+    {
+      label: "Last Name",
+      name: "last_name",
+    },
+    {
+      label: "Phone Number",
+      name: "phone_number",
+    },
+    {
+      label: "Email Address",
+      name: "email",
+    },
+    //"password",
+    {
+      label: "Created At",
+      name: "created_at",
+    },
+    // "__V",
   ];
   const [tabledata, settabledata] = useState([]);
   useEffect(() => {
@@ -87,11 +109,13 @@ const Customers = (props) => {
       .get(`${customerServerUrl}/list`, {
         params: {
           key: [],
-          pageNumber: 0,
+          pageNumber: 1,
           sort: "created_at",
         },
       })
       .then((res) => {
+        console.log("res:", res);
+        console.log("res.data:", res.data);
         settabledata(res.data);
       })
       .catch((err) => {
@@ -100,7 +124,9 @@ const Customers = (props) => {
   };
   const options = {
     filterType: "checkbox",
+    selectableRows:"none",
     onRowClick: onRowClicked,
+    //onRowsDelete:false,
   };
 
   const onAddButtonClicked = () => {
