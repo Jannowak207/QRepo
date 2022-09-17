@@ -22,6 +22,8 @@ import { red } from "@mui/material/colors";
 import CustomerInfo from "src/components/customer/customer-info";
 import axios from "axios";
 import { baseUrl } from "src/config";
+// for use context
+import { useAppContext } from "src/context/state";
 
 const customerServerUrl = `${baseUrl}/admin/customer`;
 
@@ -32,7 +34,6 @@ const getMuiTheme = () =>
         styleOverrides: {
           root: {
             padding: "8px",
-            // backgroundColor: "#CDCAC6",
             borderBottom: "1px solid #CDCAC6",
             cursor: "pointer",
           },
@@ -48,52 +49,62 @@ const getMuiTheme = () =>
     },
   });
 
-const Customers = () => {
+const Customers = (props) => {
+  // for use context
+  const mycontext = useAppContext();
+  console.log("myconext.id:", mycontext.id);
+
   const router = useRouter();
   const [rowData, setRowData] = useState({});
+  //for one customer detail data from server
   const onRowClicked = (rowData, rowMeta) => {
-    //row click routine
-    // console.log("row clicked.");
-    // console.log("rowData:" + rowData);
-    // console.log("rowMeta:" + rowMeta);
-    //router.push("/edit/customer");
-    setRowData(rowData);
-    setStatusAddEdit(true); //show edit component
-  };
-  const showCustomersTable = () => {
-    setStatusAddEdit(false);
+
+    router.push({
+      pathname: "/edit/customer",
+      query: { id: rowData[2] },
+    });
   };
 
-  const columns = ["plan", "apiLeft", "_id", "firstname", "lastname", "phone_number", "email", "password","created-at","__V"];
-  const [tabledata,settabledata] = useState([]);
-  useEffect(()=>{
-    console.log("mounted")
-    getCustomerList()
-  },[])
+  const columns = [
+    "plan",
+    "apiLeft",
+    "_id",
+    "firstname",
+    "lastname",
+    "phone_number",
+    "email",
+    "password",
+    "created-at",
+    "__V",
+  ];
+  const [tabledata, settabledata] = useState([]);
+  useEffect(() => {
+    console.log("mounted");
+    getCustomerList();
+  }, []);
   const getCustomerList = () => {
-    axios.get(`${customerServerUrl}/list`,{
-      params:{
-        key:[],
-        pageNumber:0,
-        sort:"created_at",
-      }
-    }).then(res => {
-      console.log("res data:",res.data)
-      settabledata(res.data)
-    }).catch(err => {
-      console.log(err)
-    })
-  }
+    axios
+      .get(`${customerServerUrl}/list`, {
+        params: {
+          key: [],
+          pageNumber: 0,
+          sort: "created_at",
+        },
+      })
+      .then((res) => {
+        settabledata(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const options = {
     filterType: "checkbox",
     onRowClick: onRowClicked,
-    // selectableRowsOnClick:true,
   };
 
-  const [statusAddEdit, setStatusAddEdit] = useState(false); //true:add & edit component show
   const onAddButtonClicked = () => {
-    setRowData(null);
-    setStatusAddEdit(true);
+    router.push("/add/customer");
   };
 
   return (
@@ -101,49 +112,47 @@ const Customers = () => {
       <Head>
         <title>Customers</title>
       </Head>
-      {!statusAddEdit && (
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            py: 3,
-          }}
-        >
-          <Container maxWidth={false}>
-            <Grid container spacing={3}>
-              <Grid item xl={12} lg={12} sm={12} xs={12}>
-                <Box
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    flexWrap: "wrap",
-                    m: -1,
-                  }}
-                >
-                  <Box sx={{ m: 1 }}>
-                    <Button color="primary" variant="contained" onClick={onAddButtonClicked}>
-                      Add a customer
-                    </Button>
-                  </Box>
+
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 3,
+        }}
+      >
+        <Container maxWidth={false}>
+          <Grid container spacing={3}>
+            <Grid item xl={12} lg={12} sm={12} xs={12}>
+              <Box
+                sx={{
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  flexWrap: "wrap",
+                  m: -1,
+                }}
+              >
+                <Box sx={{ m: 1 }}>
+                  <Button color="primary" variant="contained" onClick={onAddButtonClicked}>
+                    Add a customer
+                  </Button>
                 </Box>
-              </Grid>
-              <Grid item xl={12} lg={12} sm={12} xs={12}>
-                <ThemeProvider theme={getMuiTheme()}>
-                  <MUIDataTable
-                    variatnt="standard"
-                    title={"Customers"}
-                    data={tabledata}
-                    columns={columns}
-                    options={options}
-                  />
-                </ThemeProvider>
-              </Grid>
+              </Box>
             </Grid>
-          </Container>
-        </Box>
-      )}
-      {statusAddEdit && <CustomerInfo parentCallback={showCustomersTable} data={rowData} />}
+            <Grid item xl={12} lg={12} sm={12} xs={12}>
+              <ThemeProvider theme={getMuiTheme()}>
+                <MUIDataTable
+                  variatnt="standard"
+                  title={"Customers"}
+                  data={tabledata}
+                  columns={columns}
+                  options={options}
+                />
+              </ThemeProvider>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
     </>
   );
 };

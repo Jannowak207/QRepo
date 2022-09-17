@@ -20,39 +20,73 @@ import InputLabel from "@mui/material/InputLabel";
 import { DashboardLayout } from "../dashboard-layout";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import axios from "axios";
+import { baseUrl } from "src/config";
+
+const customerUrl = `${baseUrl}/admin/customer`;
 
 const CustomerInfo = (props) => {
+  //console.log("here is customer info component: the rowdata from parent comp:", props.data);
+  // if add else if edit?
+  const AddCustomer = (customer) => {
+    axios
+      .post(`${customerUrl}/add`, customer)
+      .then((res) => {
+      //  console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const EditCustomer = (customer)=> {
+    axios
+      .post(`${customerUrl}/eidt`,customer)
+      .then((res)=>{
+        if(res.data){
+        //  console.log("Edit success:",res.data)
+        }
+      }).catch(err=>console.log(err))
+  }
+  const [newPassword, setNewPassword] = useState("");
+  const [values, setValues] = useState({
+    plan: 0, // 0:standard,1:premium
+    apiLeft: 0,
+    _id: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
+    password: "",
+    created_at: "",
+    __v: 0,
+  });
+  const [values2, setValues2] = useState({
+    plan: 0,
+    apiLeft: 0,
+    _id: "",
+    first_name: "",
+    last_name: "",
+    phone_number: "",
+    email: "",
+    password: "",
+    created_at: "",
+    __v: 0,
+  });
+  if (props.data) {
+   // console.log("Edit mode");
+    values = props.data;
+    //setValues(props.data)
+    // setValues(props.values);
+    //values = Object.assign({}, props.data);
+    // setValues({
+    //   ...values,
+    //   ...props.data
+    // }) //How to assign object
+  //  console.log("assigned values:", values);
+  } else {console.log("Add mode");}
   const router = useRouter();
 
-  const [values, setValues] = useState({
-    name: "Afrim Bunjaku",
-    email: "ab@virast.org",
-    phone: "+383 49 309 060",
-    registeredOn: "25 Jul 2022",
-    plan: ["Standard", "Premium"],
-    expiryDate: "25 Jul 2023",
-    apiKey: "cc580da0-0bf1-11ed-ad04-dd1c66620",
-    apiRequestLeft: 100,
-    password: "*********",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
-  const [values2, setValues2] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    registeredOn: "",
-    plan: ["Standard", "Premium"],
-    expiryDate: "",
-    apiKey: "",
-    apiRequestLeft: 0,
-    password: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
-  const [changeMode, setChangeMode] = useState("1");
+  const [changeMode, setChangeMode] = useState("0");
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
@@ -60,24 +94,53 @@ const CustomerInfo = (props) => {
   const handleSaveClick = (event) => {
     // save routine
     //router.push("/customers");
+    if (props.data) {
+      //edit request
+      let editData={
+        id:values._id,
+        plan:values.plan,
+        apiLeft:values.apiLeft,
+        first_name:values.first_name,
+        last_name:values.last_name,
+        phone_number:values.phone_number,
+        email:values.email,
+        password:values.password,
+      }
+      EditCustomer(editData);
+     // console.log("Edit Request")
+    } else {
+      //add request
+    //  console.log("Add reques.")
+      let addData = {
+        plan:values2.plan,
+        apiLeft:values2.apiLeft,
+        first_name:values2.first_name,
+        last_name:values2.last_name,
+        phone_number:values2.phone_number,
+        email:values2.email,
+        password:values2.password
+      };
+      AddCustomer(addData);
+    }
     props.parentCallback();
   };
   const handleChange = (event) => {
     //change routine
-    setValues({
-      ...values,
+    if (props.data) {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value,
+      });
+    } else{
+      setValues2({
+        ...values2,
       [event.target.name]: event.target.value,
-    });
+      })
+    }
   };
-  const handleCopy = (event) => {
-    // apiKey copy routine
-  };
-  const handleAddMoreTime = (event) => {
-    // add more time to your subscription routine
-  };
+
   const handleDeleteAccount = (event) => {
     // account delete routine
-    //router.push('/customers');
     props.parentCallback();
   };
   return (
@@ -105,7 +168,8 @@ const CustomerInfo = (props) => {
               <Typography sx={{ mb: 0 }} variant="h4">
                 Customer Settings
               </Typography>
-              <Button
+              {props.data && 
+               <Button
                 color="error"
                 variant="contained"
                 onClick={handleDeleteAccount}
@@ -114,6 +178,8 @@ const CustomerInfo = (props) => {
               >
                 Delete your account
               </Button>
+              }
+             
             </Box>
 
             <Divider />
@@ -126,11 +192,6 @@ const CustomerInfo = (props) => {
                         <Tabs value={tabIndex} onChange={handleTabChange}>
                           <Tab label="Account" />
                           <Tab label="Password" />
-                          {/* <Tab label="Own short domain" />
-                          <Tab label="Language" />
-                          <Tab label="Integrations" />
-                          <Tab label="Invoice" />
-                          <Tab label="Email preferences" /> */}
                         </Tabs>
                       </Box>
                       <Box sx={{ padding: 2 }}>
@@ -141,10 +202,32 @@ const CustomerInfo = (props) => {
                                 fullWidth
                                 helperText="Please specify the name"
                                 label="Name"
-                                name="name"
+                                name="first_name"
                                 onChange={handleChange}
                                 required
-                                value={values.name}
+                                value={values.first_name}
+                                variant="outlined"
+                              />
+                            </Grid>
+                            <Grid item md={6} sx={12}>
+                              <TextField
+                                fullWidth
+                                label="Last Name"
+                                name="last_name"
+                                onChange={handleChange}
+                                required
+                                value={values.last_name}
+                                variant="outlined"
+                              />
+                            </Grid>
+                            <Grid item md={6} sx={12}>
+                              <TextField
+                                fullWidth
+                                label="Phone number"
+                                name="phone_number"
+                                onChange={handleChange}
+                                required
+                                value={values.phone_number}
                                 variant="outlined"
                               />
                             </Grid>
@@ -159,74 +242,27 @@ const CustomerInfo = (props) => {
                                 variant="outlined"
                               />
                             </Grid>
-                            <Grid item md={6} sx={12}>
-                              <TextField
-                                fullWidth
-                                label="Phone number"
-                                name="phone"
-                                onChange={handleChange}
-                                required
-                                value={values.phone}
-                                variant="outlined"
-                              />
-                            </Grid>
+
                             <Grid item md={6} sx={12}>
                               <TextField
                                 fullWidth
                                 label="Registered on:"
-                                name="registeredOn"
+                                name="created_at"
                                 onChange={handleChange}
                                 required
-                                value={values.registeredOn}
+                                value={values.created_at}
                                 variant="outlined"
                               />
                             </Grid>
-                            <Grid item md={2} sx={6}>
-                              <TextField
-                                fullWidth
-                                label="Expiry date"
-                                name="expiryDate"
-                                onChange={handleChange}
-                                required
-                                value={values.expiryDate}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={4} sx={6}>
-                              <Button
-                                color="secondary"
-                                variant="contained"
-                                onClick={handleAddMoreTime}
-                              >
-                                Add more time to your subscription
-                              </Button>
-                            </Grid>
-                            <Grid item md={5} sx={6}>
-                              <TextField
-                                fullWidth
-                                label="apiKey"
-                                name="apiKey"
-                                onChange={handleChange}
-                                required
-                                value={values.apiKey}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={1} sx={6}>
-                              <Box sx={{ alignItems: "center" }}>
-                                <Button color="secondary" variant="contained" onClick={handleCopy}>
-                                  Copy
-                                </Button>
-                              </Box>
-                            </Grid>
+
                             <Grid item md={6} sx={12}>
                               <TextField
                                 fullWidth
                                 label="API request left"
-                                name="apiRequestLeft"
+                                name="apiLeft"
                                 onChange={handleChange}
                                 required
-                                value={values.apiRequestLeft}
+                                value={values.apiLeft}
                                 variant="outlined"
                               />
                             </Grid>
@@ -242,8 +278,8 @@ const CustomerInfo = (props) => {
                                 displayEmpty
                                 inputProps={{ "aria-label": "Without label" }}
                               >
-                                <MenuItem value={1}>{values.plan[0]}</MenuItem>
-                                <MenuItem value={2}>{values.plan[1]}</MenuItem>
+                                <MenuItem value={0}>Standard</MenuItem>
+                                <MenuItem value={1}>Premium</MenuItem>
                               </Select>
                             </Grid>
                           </Grid>
@@ -258,8 +294,6 @@ const CustomerInfo = (props) => {
                             <Grid item md={6} sx={12}>
                               <TextField
                                 fullWidth
-                                // helperText="Please specify the name"
-                                // label="Name"
                                 name="password"
                                 onChange={handleChange}
                                 // required
@@ -280,7 +314,7 @@ const CustomerInfo = (props) => {
                                 name="newPassword"
                                 onChange={handleChange}
                                 // required
-                                value={values.newPassword}
+
                                 variant="outlined"
                               />
                             </Grid>
@@ -297,37 +331,12 @@ const CustomerInfo = (props) => {
                                 name="confirmNewPassword"
                                 onChange={handleChange}
                                 // required
-                                value={values.confirmNewPassword}
+
                                 variant="outlined"
                               />
                             </Grid>
                           </Box>
                         )}
-                        {/* {tabIndex === 2 && (
-                          <Box>
-                            <Typography>The third tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 3 && (
-                          <Box>
-                            <Typography>The forth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 4 && (
-                          <Box>
-                            <Typography>The fifth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 5 && (
-                          <Box>
-                            <Typography>The sixth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 6 && (
-                          <Box>
-                            <Typography>The seventh tab</Typography>
-                          </Box>
-                        )} */}
                       </Box>
                     </Box>
                   </Grid>
@@ -343,11 +352,6 @@ const CustomerInfo = (props) => {
                         <Tabs value={tabIndex} onChange={handleTabChange}>
                           <Tab label="Account" />
                           <Tab label="Password" />
-                          {/* <Tab label="Own short domain" />
-                          <Tab label="Language" />
-                          <Tab label="Integrations" />
-                          <Tab label="Invoice" />
-                          <Tab label="Email preferences" /> */}
                         </Tabs>
                       </Box>
                       <Box sx={{ padding: 2 }}>
@@ -358,10 +362,32 @@ const CustomerInfo = (props) => {
                                 fullWidth
                                 helperText="Please specify the name"
                                 label="Name"
-                                name="name"
+                                name="first_name"
                                 onChange={handleChange}
                                 required
-                                value={values2.name}
+                                value={values2.first_name}
+                                variant="outlined"
+                              />
+                            </Grid>
+                            <Grid item md={6} sx={12}>
+                              <TextField
+                                fullWidth
+                                label="Last Name"
+                                name="last_name"
+                                onChange={handleChange}
+                                required
+                                value={values2.last_name}
+                                variant="outlined"
+                              />
+                            </Grid>
+                            <Grid item md={6} sx={12}>
+                              <TextField
+                                fullWidth
+                                label="Phone number"
+                                name="phone_number"
+                                onChange={handleChange}
+                                required
+                                value={values2.phone_number}
                                 variant="outlined"
                               />
                             </Grid>
@@ -376,74 +402,16 @@ const CustomerInfo = (props) => {
                                 variant="outlined"
                               />
                             </Grid>
-                            <Grid item md={6} sx={12}>
-                              <TextField
-                                fullWidth
-                                label="Phone number"
-                                name="phone"
-                                onChange={handleChange}
-                                required
-                                value={values2.phone}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={6} sx={12}>
-                              <TextField
-                                fullWidth
-                                label="Registered on:"
-                                name="registeredOn"
-                                onChange={handleChange}
-                                required
-                                value={values2.registeredOn}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={2} sx={6}>
-                              <TextField
-                                fullWidth
-                                label="Expiry date"
-                                name="expiryDate"
-                                onChange={handleChange}
-                                required
-                                value={values2.expiryDate}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={4} sx={6}>
-                              <Button
-                                color="secondary"
-                                variant="contained"
-                                onClick={handleAddMoreTime}
-                              >
-                                Add more time to your subscription
-                              </Button>
-                            </Grid>
-                            <Grid item md={5} sx={6}>
-                              <TextField
-                                fullWidth
-                                label="apiKey"
-                                name="apiKey"
-                                onChange={handleChange}
-                                required
-                                value={values2.apiKey}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={1} sx={6}>
-                              <Box sx={{ alignItems: "center" }}>
-                                <Button color="secondary" variant="contained" onClick={handleCopy}>
-                                  Copy
-                                </Button>
-                              </Box>
-                            </Grid>
+                     
+
                             <Grid item md={6} sx={12}>
                               <TextField
                                 fullWidth
                                 label="API request left"
-                                name="apiRequestLeft"
+                                name="apiLeft"
                                 onChange={handleChange}
                                 required
-                                value={values2.apiRequestLeft}
+                                value={values2.apiLeft}
                                 variant="outlined"
                               />
                             </Grid>
@@ -459,8 +427,8 @@ const CustomerInfo = (props) => {
                                 displayEmpty
                                 inputProps={{ "aria-label": "Without label" }}
                               >
-                                <MenuItem value={1}>{values2.plan[0]}</MenuItem>
-                                <MenuItem value={2}>{values2.plan[1]}</MenuItem>
+                                <MenuItem value={0}>Standard</MenuItem>
+                                <MenuItem value={1}>Premium</MenuItem>
                               </Select>
                             </Grid>
                           </Grid>
@@ -484,67 +452,8 @@ const CustomerInfo = (props) => {
                                 variant="outlined"
                               />
                             </Grid>
-                            <Grid item md={6} sx={12}>
-                              <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
-                                New Password:
-                              </Typography>
-                            </Grid>
-                            <Grid item md={6} sx={12}>
-                              <TextField
-                                fullWidth
-                                helperText="Please enter new password"
-                                // label="Name"
-                                name="newPassword"
-                                onChange={handleChange}
-                                // required
-                                value={values2.newPassword}
-                                variant="outlined"
-                              />
-                            </Grid>
-                            <Grid item md={6} sx={12}>
-                              <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
-                                Confirm New Password:
-                              </Typography>
-                            </Grid>
-                            <Grid item md={6} sx={12}>
-                              <TextField
-                                fullWidth
-                                helperText="Please re-enter new password"
-                                // label="Name"
-                                name="confirmNewPassword"
-                                onChange={handleChange}
-                                // required
-                                value={values2.confirmNewPassword}
-                                variant="outlined"
-                              />
-                            </Grid>
                           </Box>
                         )}
-                        {/* {tabIndex === 2 && (
-                          <Box>
-                            <Typography>The third tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 3 && (
-                          <Box>
-                            <Typography>The forth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 4 && (
-                          <Box>
-                            <Typography>The fifth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 5 && (
-                          <Box>
-                            <Typography>The sixth tab</Typography>
-                          </Box>
-                        )}
-                        {tabIndex === 6 && (
-                          <Box>
-                            <Typography>The seventh tab</Typography>
-                          </Box>
-                        )} */}
                       </Box>
                     </Box>
                   </Grid>
