@@ -1,49 +1,119 @@
-import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
-import MUIDataTable from 'mui-datatables';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
+import MUIDataTable from "mui-datatables";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+
+import axios from "axios";
+import { baseUrl } from "src/config";
+const mediaServerUrl = `${baseUrl}/admin/media`;
+
+const getMuiTheme = () =>
+  createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: "8px",
+            // backgroundColor: "#CDCAC6",
+            borderBottom: "1px solid #CDCAC6",
+            cursor: "pointer",
+          },
+        },
+      },
+      MuiToolbar: {
+        styleOverrides: {
+          regular: {
+            minHeight: "8px",
+          },
+        },
+      },
+    },
+  });
+
 
 export const TopTenQRCampaigns = (props) => {
-  
+  const router = useRouter();
+
   //sample data
-  const columns = ["id","Campaign Name", "QR ID", "Country", "City", "Date", "Time","Type", "Top Device", "Top Location", "Scans"];
-  const data = [
-    ["2","Campaign WVC2", "WVC2", "US", "Los Angeles", "9-1-2022", "9:30 AM", "URL", "iOS", "Bjaerred","1"],
-    ["1","Campaign ACD", "ACD", "Australia", "Sydney", "4-19-2022", "10:30 AM", "File", "Android", "ABCV","5"],
+  const columns = [
+    {
+      label: "ID",
+      name: "_id",
+      options: {
+        display: false,
+      },
+    },
+    {
+      label: "File Name",
+      name: "file_name",
+    },
+    {
+      label: "Type",
+      name: "file_type",
+    },
+    {
+      label: "Url",
+      name: "file_url",
+    },
+    {
+      label: "Size",
+      name: "file_size",
+    },
+    {
+      label: "Uploaded At",
+      name: "created_at",
+    },
   ];
+  const [tabledata, settabledata] = useState([]);
+  useEffect(() => {
+    //console.log("mounted");
+    getRecentMediaList();
+  }, []);
+  const getRecentMediaList = () => {
+    axios
+      .get(`${mediaServerUrl}/recentlist`, {
+        params: {},
+      })
+      .then((res) => {
+        // console.log("res:", res);
+        // console.log("res.data:", res.data);
+        settabledata(res.data);
+        // console.log("tabledata:", tabledata);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const rowData = [];
   const rowMeta = {};
-  const onRowClicked = (rowData, rowMeta) =>{
+  const onRowClicked = (rowData, rowMeta) => {
     //row click routine
-    console.log("row clicked.");
-    console.log("rowData:"+rowData);
-    console.log("rowMeta:"+rowMeta);
+    router.push({
+      pathname: "/edit/media",
+      query: { id: rowData[0] },
+    });
   };
   const options = {
     filterType: "checkbox",
-    onRowClick:onRowClicked,
+    selectableRows: "none",
+    onRowClick: onRowClicked,
   };
 
   return (
-
-        <Grid {...props}
-          container
-          spacing={3}
-          
-        >
-          <Grid
-            item
-            xl={12}
-            lg={12}
-            sm={12}
-            xs={12}
-            >
-            <MUIDataTable
-              title={"Top 10 QR Code Campaigns"}
-              data={data}
-              columns={columns}
-              options={options}
-            />
-          </Grid>
-        </Grid>
-  )
+    <Grid {...props} container spacing={3}>
+      <Grid item xl={12} lg={12} sm={12} xs={12}>
+        <ThemeProvider theme={getMuiTheme()}>
+          <MUIDataTable
+            title={"Recent 5 Medias"}
+            data={tabledata}
+            columns={columns}
+            options={options}
+          />
+        </ThemeProvider>
+      </Grid>
+    </Grid>
+  );
 };

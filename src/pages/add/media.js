@@ -42,7 +42,7 @@ import { useRouter } from "next/router";
 import QRCodeGen from "../../components/qr-code-gen";
 
 import QRCodeStyling, { dotTypes } from "qr-code-styling";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { baseUrl } from "src/config";
 
@@ -63,71 +63,9 @@ const qrCode = new QRCodeStyling({
 // end for qr code
 
 // for media add to server database
-
-const EditMedia = (props) => {
-  const router = useRouter();
-  const mediaEditUrl = `${baseUrl}/admin/media/edit`;
-  const mediaDelUrl = `${baseUrl}/admin/media/delete`;
-  const mediaGetOneUrl = `${baseUrl}/admin/media/one`;
-  // get selected media details data from server when mounted this page
-  useEffect(() => {
-    axios
-      .get(mediaGetOneUrl, {
-        params: {
-          _id: router.query.id,
-        },
-      })
-      .then((res) => {
-        if (res.data) {
-          // console.log("one data;", res.data);
-          // values = res.data;
-          const u = baseUrl + "/videos/" + res.data.file_name;
-          setMediaData({
-            ...mediaData,
-            fileName: res.data.file_name,
-            fileType: res.data.file_type,
-            fileSize: res.data.file_size,
-            // fileUrl:`${baseUrl}/videos/${res.data.file_name}`,
-            fileUrl: u,
-          });
-          // console.log("fileUrl", u);
-          setMediaDataTemp(res.data);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log("here:", router.query);
-  }, [router.query]);
-  //for edit request to server
-  const EditMedia = (media) => {
-    axios
-      .post(`${mediaEditUrl}`, media)
-      .then((res) => {
-        if (res.data) {
-          //  console.log("Edit success:",res.data)
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const DeleteMedia = () => {
-    // need id for del
-    axios
-      .get(`${mediaDelUrl}`, {
-        params: {
-          _id: router.query.id,
-        },
-      })
-      .then((res) => {
-        //console.log("delete success.")
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  //for validate
-  const [noChange, setNoChange] = useState(false);
+const mediaAddUrl = `${baseUrl}/admin/media/add`;
+const downloadUrl = `${baseUrl}/videos`;
+const EditMedia = () => {
   //for download type
   const [changeMode, setChangeMode] = useState("1");
 
@@ -138,7 +76,7 @@ const EditMedia = (props) => {
   };
   //======end for accordian============================
   // for qr code------------------------------------------------------------------------------
-  const [url, setUrl] = useState("https://qr-code-styling.com"); // file url update
+  const [url, setUrl] = useState(null); // file url update
   const [dotType, setDotType] = useState("rounded");
   const [dotColor, setDotColor] = useState("#000000");
   const [eyeType, setEyeType] = useState("dot");
@@ -186,14 +124,14 @@ const EditMedia = (props) => {
   const onSetDotType = (e) => {
     setDotType(e.target.value);
     if (e.target.alt) setDotType(e.target.alt);
-    // console.log(e.target.alt);
+    console.log(e.target.alt);
   };
   const onSetEyeType = (e) => {
     let eyeArray = e.target.value.split(".");
     setEyeType(eyeArray);
   };
   const onSetLog = (logoImg) => {
-    // console.log("logo received.");
+    console.log("logo received.");
     setLogo(logoImg);
     logoImage = logoImg;
     // console.log("received logo:" + logoImg);
@@ -208,7 +146,7 @@ const EditMedia = (props) => {
       setEyeDotColor(colors[2]);
       eyeSquareColor = colors[3];
       setEyeSqureColor(colors[3]);
-      // console.log("recev:" + backColor + " " + dotColor + " " + eyeDotColor + " " + eyeSquareColor);
+      console.log("recev:" + backColor + " " + dotColor + " " + eyeDotColor + " " + eyeSquareColor);
     }
   };
   const onUrlChange = (event) => {
@@ -226,46 +164,82 @@ const EditMedia = (props) => {
     });
   };
   // end for qr code-----------------------------------------------------------------------------
+  // const AddMedia = (media) => {
+  //   console.log("media add:",media)
+  //   axios
+  //     .post(`${mediaAddUrl}`, media)
+  //     .then((res) => {
+  //       //  console.log(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  const [mediaData, setMediaData] = useState(new FormData());
+  const [fileUrl, setFileUrl] = useState("");
 
-  const [mediaData, setMediaData] = useState({
-    fileName: "",
-    fileType: "",
-    fileSize: 0,
-    fileUrl: "",
-  });
-  //for update edit temp
-  const [mediaDataTemp, setMediaDataTemp] = useState({
-    fileName: "",
-    fileType: "",
-    fileSize: 0,
-    fileUrl: "",
-  });
-
+  const handleChange = (e) => {
+    const formData = new FormData();
+    formData.append("file", e.target.files[0]);
+    // setMediaData({
+    //   ...mediaData,
+    //   fileName: event.target.value,
+    //   fileType: event.target.files[0].type,
+    //   fileSize: event.target.files[0].size,
+    //   fileUrl: URL.createObjectURL(event.target.files[0]).replace('blob:',''),
+    // });
+    // setUrl(event.target.value);
+    setMediaData(formData);
+  };
+  const router = useRouter();
   //for input validate
   const [okAllFields, setOkAllFields] = useState(true);
+  const [isUploaded, setIsUploaded] = useState(false)
   // for add buton clicked function
   const handleSave = () => {
+    axios
+      .post(mediaAddUrl, mediaData)
+      .then((res) => {
+        // console.log("media file upload res.data:", res.data);
+        if (res.data.status) {
+          setIsUploaded(true)
+          // console.log("res.data.status:", res.data.status);
+          setFileUrl(`${downloadUrl}/${res.data.data.file_name}`);
+          setUrl(`${downloadUrl}/${res.data.data.file_name}`);
+          // console.log("file url:", res.data.data.file_name);
+          // console.log("file url:", fileUrl);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     // save routine
     // for validation
-    if (mediaData == mediaDataTemp) {
-      setNoChange(true);
-    } else {
-      let editData = {
-        file_name: mediaData.fileName,
-        file_type: mediaData.fileType,
-        file_size: mediaData.fileSize,
-        file_url: mediaData.fileUrl,
-      };
-      EditMedia(editData);
-      router.push("/media");
-    }
+    // let addData = {
+    //   file_name: mediaData.fileName,
+    //   file_type: mediaData.fileType,
+    //   file_size: mediaData.fileSize,
+    //   file_url: mediaData.fileUrl,
+    // };
+
+    // if (
+    //   addData.file_name == "" ||
+    //   addData.file_type == "" ||
+    //   addData.file_size == "" ||
+    //   addData.file_url == ""
+    // ) {
+    //   console.log("all fields required.");
+    //   setOkAllFields(false);
+    // } else {
+    // //  AddMedia(addData);
+
+    //   router.push("/media");
+    // }
   };
-  //for delete media
-  const handleDeleteMedia = (event) => {
-    // account delete routine
-    DeleteMedia();
-    router.push("/media");
-  };
+  ////////////////////////////////////////////////////////////////////////
+
+  ////////////////////////////////////////////////////////////////////////
+
   const onCancelClicked = () => {
     router.push("/media");
   };
@@ -273,7 +247,7 @@ const EditMedia = (props) => {
   return (
     <>
       <Head>
-        <title>Media | Edit</title>
+        <title>Media Library</title>
       </Head>
       <Box
         component="main"
@@ -284,60 +258,35 @@ const EditMedia = (props) => {
       >
         <Container maxWidth={false}>
           <Card>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                m: 0,
-              }}
-            >
-              <Typography variant="h5" sx={{ m: 3 }}>
-                Media Details
-              </Typography>
-              <Box>
-                <Button color="success" variant="contained" onClick={onCancelClicked} sx={{ height: 30, mr: 3 }}>
-                  Go to Library
-                </Button>
-                <Button
-                  color="error"
-                  variant="contained"
-                  onClick={handleDeleteMedia}
-                  size="small"
-                  sx={{ height: 30, mr: 3 }}
-                >
-                  Delete this media
-                </Button>
-              </Box>
-            </Box>
-            {noChange && (
+            <Typography variant="h5" sx={{ m: 3 }}>
+              Media Details
+            </Typography>
+            {!okAllFields && (
               <Grid item lg={12} md={12} sx={12} sx={{ ml: 3 }}>
-                <Typography color="error" variant="h6">
-                  No changes! Select new file please.
-                </Typography>
+                <Typography color="error">No selected media file.</Typography>
               </Grid>
             )}
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item lg={6} md={6} sx={12}>
-                  <TextField
-                    //autoFocus
-                    aria-readonly
+                  <Input
+                    autoFocus
                     margin="dense"
                     id="mediafile"
-                    type="text"
+                    type="file"
+                    accept="video/mp4,video/x-m4v,video/*"
                     name="fileName"
                     fullWidth
                     variant="standard"
-                    label="File Name"
-                    value={mediaData.fileName}
-                    // onChange={handleChange}
+                    label="Media File"
+                    //value={mediaData.fileName}
+                    onChange={handleChange}
                   />
                 </Grid>
-                <Grid item lg={6} md={6} sx={12}>
+                {/* <Grid item lg={3} md={3} sx={12}>
                   <TextField
-                    aria-readonly
+                    autoFocus
                     margin="dense"
                     id="filetype"
                     type="text"
@@ -346,26 +295,12 @@ const EditMedia = (props) => {
                     label="File Type"
                     name="fileType"
                     value={mediaData.fileType}
-                    //onChange={handleChange}
+                    onChange={handleChange}
                   />
                 </Grid>
-
-                <Grid item lg={6} md={6} sx={12}>
+                <Grid item lg={3} md={3} sx={12}>
                   <TextField
-                    aria-readonly
-                    margin="dense"
-                    id="url"
-                    type="url"
-                    fullWidth
-                    variant="standard"
-                    label="File URL"
-                    name="fileUrl"
-                    value={mediaData.fileUrl}
-                  />
-                </Grid>
-                <Grid item lg={6} md={6} sx={12}>
-                  <TextField
-                    aria-readonly
+                    autoFocus
                     margin="dense"
                     id="size"
                     type="number"
@@ -375,6 +310,39 @@ const EditMedia = (props) => {
                     name="fileSize"
                     value={mediaData.fileSize}
                   />
+                </Grid>
+                <Divider />*/}
+                <Grid item lg={6} md={6} sx={12}>
+                  <TextField
+                    //autoFocus
+                    margin="dense"
+                    id="url"
+                    type="url"
+                    fullWidth
+                    variant="standard"
+                    label="File URL"
+                    name="fileUrl"
+                    value={fileUrl}
+                    
+                  />
+                </Grid>
+                <Grid item lg={4} md={12} sx={12}>
+                  {!isUploaded && (
+                    <Button
+                      sx={{ ml: 1 }}
+                      color="success"
+                      variant="contained"
+                      onClick={handleSave}
+                      fullWidth
+                    >
+                      Upload
+                    </Button>
+                  )}
+                  {isUploaded && (
+                    <Button color="success" variant="contained" onClick={onCancelClicked} fullWidth>
+                      Go to Library
+                    </Button>
+                  )}
                 </Grid>
               </Grid>
               <Divider />
@@ -678,9 +646,9 @@ const EditMedia = (props) => {
                   </Button>
                 </Grid>
                 <Grid item lg={3} md={12} sx={12}>
-                  {noChange && (
+                  {!okAllFields && (
                     <Typography color="error" fullWidth my={1} ml={4}>
-                      No changes! Select new file please.
+                      No selected media file.
                     </Typography>
                   )}
                 </Grid>
@@ -697,6 +665,7 @@ const EditMedia = (props) => {
     </>
   );
 };
+
 EditMedia.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default EditMedia;
 // //------ for qr code ------------------------------------------------------------------------

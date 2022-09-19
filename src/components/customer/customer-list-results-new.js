@@ -24,7 +24,7 @@ export const CustomerListResultsNew = ({ customers, ...rest }) => {
 //sample data
 const columns = ["NAME", "EMAIL", "LOCATION", "PHONE", "REGISTRATION DATE"];
 const data = customers;
-console.log(data);
+//console.log(data);
 const options = {
   filterType: "checkbox",
 };

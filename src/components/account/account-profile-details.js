@@ -10,12 +10,14 @@ import {
   Tab,
   Tabs,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { baseUrl } from "src/config";
-
-const accountServiceUrl = `${baseUrl}/account`;
+const isConfirmed = true;
+const isChanged = false;
+const adminInfoUrl = `${baseUrl}/admin/auth`;
 
 const states = [
   {
@@ -34,29 +36,54 @@ const states = [
 
 export const AccountProfileDetails = (props) => {
   const router = useRouter();
+  //for no change
+  // const [isChanged, setIsChanged] = useState(true);
+  //for confirm password
+  // const [isConfirmed, setIsConfirmed] = useState(true);
   const [values, setValues] = useState({
-    firstName: "Katarina",
-    lastName: "Smith",
-    email: "demo@devias.io",
-    phone: "",
-    state: "Alabama",
-    country: "USA",
-    currentPassword: "********",
+    _id: null,
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
     newPassword: "",
     confirmNewPassword: "",
   });
-  // for change account info: there is change if or not, if yes=>post req, no=> no post
-  const [changeCount, setChangeCount] = useState(0);
+  // temp for comparison
+  const [tempValues, setTempValues] = useState({
+    _id: null,
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    newPassword: "",
+    confirmNewPassword: "",
+  });
+  // for get admin info
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      axios
+        .get(`${adminInfoUrl}/get`, {
+          params: JSON.parse(localStorage.getItem("token")),
+        })
+        .then((res) => {
+          if (res.data.status) {
+            console.log("get admin:", res.data.data);
+            setValues({ ...values, ...res.data.data });
+            setTempValues({ ...values, ...res.data.data });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, []);
+
   // for tabs
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
   }; //=========
-
-  useEffect(() => {
-    console.log(values);
-    setChangeCount((c) => c++);
-  }, [values]);
 
   const handleChange = (event) => {
     setValues({
@@ -65,19 +92,60 @@ export const AccountProfileDetails = (props) => {
     });
   };
   const saveAccount = () => {
-    // post to the server routine
-    // if changeCount>0 =>post
-    // if(changeCount > 0)
-    //   axios
-    //     .post(accountServiceUrl,values,{
-    //       headers:{
-    //         Accept: "application/json",
-    //         "Content-Type":"application/json;charset=UTF-8",
-    //       },
-    //     })
-    //     .then(({data})=>{
-    //       console.log(data);//response data
-    //     });
+    if (JSON.stringify(values) == JSON.stringify(tempValues)) {
+      isChanged = false;
+    } else {
+      isChanged = true;
+    }
+    console.log("newPassword:", values.newPassword);
+    if (values.newPassword != "" && values.newPassword == values.confirmNewPassword) {
+      console.log("here");
+      console.log("here ", values);
+      values.password = values.newPassword;
+      isConfirmed = true;
+    } else {
+      isConfirmed = false;
+    }
+    if (isChanged) {
+      let editData = {
+        _id: values._id,
+        email: values.email,
+        first_name: values.first_name,
+        last_name: values.last_name,
+        password: values.password,
+      };
+      console.log("ischanged:", isChanged);
+      console.log("isconfirmed", isConfirmed);
+      console.log("password:", values.password);
+      console.log("values:", editData);
+      if (values.newPassword == "" || values.newPassword == values.confirmNewPassword) {
+        axios
+          .post(`${adminInfoUrl}/edit`, values)
+          .then((res) => {
+            console.log(res.data.data);
+            if (res.data.status) {
+              //setValues(res.data.data);// memory leak
+              // change the localstorage
+              if (typeof window !== "undefined") {
+                localStorage.removeItem("email");
+                localStorage.setItem("email", JSON.stringify({ email: res.data.data.email }));
+                localStorage.removeItem("password");
+                localStorage.setItem(
+                  "password",
+                  JSON.stringify({ password: res.data.data.password })
+                );
+              }
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        router.push("/dashboard");
+      }
+    } else {
+    }
+  };
+  const cancelAccount = () => {
     router.push("/dashboard");
   };
   return (
@@ -96,10 +164,10 @@ export const AccountProfileDetails = (props) => {
                   fullWidth
                   helperText="Please specify the first name"
                   label="First name"
-                  name="firstName"
+                  name="first_name"
                   onChange={handleChange}
                   required
-                  value={values.firstName}
+                  value={values.first_name}
                   variant="outlined"
                 />
               </Grid>
@@ -107,10 +175,10 @@ export const AccountProfileDetails = (props) => {
                 <TextField
                   fullWidth
                   label="Last name"
-                  name="lastName"
+                  name="last_name"
                   onChange={handleChange}
                   required
-                  value={values.lastName}
+                  value={values.last_name}
                   variant="outlined"
                 />
               </Grid>
@@ -125,7 +193,7 @@ export const AccountProfileDetails = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item md={6} xs={12}>
+              {/* <Grid item md={6} xs={12}>
                 <TextField
                   fullWidth
                   label="Phone Number"
@@ -135,8 +203,8 @@ export const AccountProfileDetails = (props) => {
                   value={values.phone}
                   variant="outlined"
                 />
-              </Grid>
-              <Grid item md={6} xs={12}>
+              </Grid> */}
+              {/* <Grid item md={6} xs={12}>
                 <TextField
                   fullWidth
                   label="Country"
@@ -146,8 +214,8 @@ export const AccountProfileDetails = (props) => {
                   value={values.country}
                   variant="outlined"
                 />
-              </Grid>
-              <Grid item md={6} xs={12}>
+              </Grid> */}
+              {/* <Grid item md={6} xs={12}>
                 <TextField
                   fullWidth
                   label="Select State"
@@ -165,7 +233,7 @@ export const AccountProfileDetails = (props) => {
                     </option>
                   ))}
                 </TextField>
-              </Grid>
+              </Grid> */}
             </Grid>
           )}
           {tabIndex === 1 && (
@@ -177,10 +245,10 @@ export const AccountProfileDetails = (props) => {
               <TextField
                 fullWidth
                 label="Current Password"
-                name="currentPassword"
-                onChange={handleChange}
+                name="password"
+                //onChange={handleChange}
                 required
-                value={values.currentPassword}
+                value={values.password}
                 variant="outlined"
                 sx={{ mb: 2 }}
               />
@@ -215,8 +283,21 @@ export const AccountProfileDetails = (props) => {
             mr: 1,
           }}
         >
-          <Button color="primary" variant="contained" onClick={saveAccount}>
-            Save details
+          {!isChanged && (
+            <Typography variant="body1" mt={1} mr={4} color="error">
+              No changes.
+            </Typography>
+          )}
+          {!isConfirmed && (
+            <Typography variant="body1" mt={1} mr={4} color="error">
+              Please confirm your password.
+            </Typography>
+          )}
+          <Button color="primary" sx={{ mr: 3 }} variant="contained" onClick={saveAccount}>
+            Save
+          </Button>
+          <Button color="primary" variant="contained" onClick={cancelAccount}>
+            Cancel
           </Button>
         </Box>
       </Card>

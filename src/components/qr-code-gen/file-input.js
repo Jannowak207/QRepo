@@ -7,20 +7,20 @@ import {
   CardContent,
   Divider,
   Grid,
-  Typography
-} from '@mui/material';
-import { useState, useEffect } from 'react';
+  Typography,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 
 const FileInput = (props) => {
-
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
     if (selectedImage) {
-      let imgUrl = URL.createObjectURL(selectedImage)
+      let imgUrl = URL.createObjectURL(selectedImage);
+      // console.log('imageURL:',imgUrl)
       setImageUrl(imgUrl);
-      props.parentCallback(imgUrl)
-      console.log("logo changed.")
+      props.parentCallback(imgUrl);
+      // console.log("logo changed.");
     }
   }, [selectedImage]);
 
@@ -28,7 +28,7 @@ const FileInput = (props) => {
   const handleRemove = () => {
     setSelectedImage(null);
     setImageUrl(null);
-  }
+  };
 
   return (
     <>
@@ -38,42 +38,42 @@ const FileInput = (props) => {
           <img src={imageUrl} alt={selectedImage.name} height="80px" />
         </Box>
       )}
-      <input 
-          accept="image/*"
-          type="file"
-          id="select-image"
-          style={{ display: 'none' }}
-          onChange={e => setSelectedImage(e.target.files[0])}
+      <input
+        type="file"
+        accept="image/png, image/jpeg"
+        id="select-image"
+        style={{ display: "none" }}
+        onChange={(e) => setSelectedImage(e.target.files[0])}
       />
       <Grid container spacing={1}>
         <Grid item xs={12} md={12}>
           <label htmlFor="select-image">
-            <Button 
-                variant="contained"
-                color="primary"
-                style={{
-                  width: "30%",
-                }}
-                component="span">
+            <Button
+              variant="contained"
+              color="primary"
+              style={{
+                width: "30%",
+              }}
+              component="span"
+            >
               Upload Image
             </Button>
           </label>
         </Grid>
         <Grid item xs={12} md={12}>
-          <Button variant="contained"
-              color="primary"
-              component="span"
-              style={{
-                width: "30%",
-              }}
-              onClick={handleRemove}>
+          <Button
+            variant="contained"
+            color="primary"
+            component="span"
+            style={{
+              width: "30%",
+            }}
+            onClick={handleRemove}
+          >
             Remove logo
           </Button>
         </Grid>
       </Grid>
-
-
-
     </>
   );
 };

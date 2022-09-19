@@ -18,14 +18,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
-//for use context for id
-import { useAppContext } from "src/context/state";
+var isConfirmed = true;
+var isChanged = false;
 
 const EditCutomer = (props) => {
-  //for use context
-  const mycontext = useAppContext();
-
   const customerEditUrl = `${baseUrl}/admin/customer/edit`;
   const customerDelUrl = `${baseUrl}/admin/customer/delete`;
   const customerGetOneUrl = `${baseUrl}/admin/customer/one`;
@@ -47,16 +43,16 @@ const EditCutomer = (props) => {
       })
       .then((res) => {
         if (res.data) {
-          console.log("one data;", res.data);
+          // console.log("one data;", res.data);
           // values = res.data;
-          setValues(res.data);
-          setValuesTemp(res.data);
+          setValues({ ...values, ...res.data });
+          setTempValues({ ...values, ...res.data });
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    console.log("here:", router.query);
+    // console.log("here:", router.query);
   }, [router.query]);
 
   //for edit request to server
@@ -99,9 +95,11 @@ const EditCutomer = (props) => {
     password: "",
     created_at: "",
     __v: 0,
+    newPassword: "",
+    confirmNewPassword: "",
   });
   // temp for compare with original
-  const [valuesTemp, setValuesTemp] = useState({
+  const [tempValues, setTempValues] = useState({
     plan: 0, // 0:standard,1:premium
     apiLeft: 0,
     _id: "",
@@ -112,22 +110,41 @@ const EditCutomer = (props) => {
     password: "",
     created_at: "",
     __v: 0,
+    newPassword: "",
+    confirmNewPassword: "",
   });
   //for validate
-  const [noChange, setNoChange] = useState(false);
+
   //for tab
   const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (event, newTabIndex) => {
     setTabIndex(newTabIndex);
   };
 
+  //for no change
+ 
+  //for confirm password
+
   // for edit save btn clicked
   const handleSaveClick = (event) => {
     // save routine
     //validate
-    if (values == valuesTemp) {
-      setNoChange(true);
+    if (JSON.stringify(values) == JSON.stringify(tempValues)) {
+      isChanged = false;
     } else {
+      isChanged = true;
+    }
+    if (values.newPassword != "" && values.newPassword == values.confirmNewPassword) {
+      console.log("here");
+      console.log("here ", values);
+      values.password = values.newPassword;
+      isConfirmed = true;
+    } else {
+      isConfirmed = false;
+    }
+
+    if (isChanged) {
+      // console.log("changed?", isChanged);
       let editData = {
         id: values._id,
         plan: values.plan,
@@ -138,8 +155,12 @@ const EditCutomer = (props) => {
         email: values.email,
         password: values.password,
       };
-      EditCustomer(editData);
-      router.push("/customers");
+
+      if (values.newPassword == "" || values.newPassword == values.confirmNewPassword) {
+        isConfirmed = true
+        EditCustomer(editData);
+        router.push("/customers");
+      }
     }
   };
 
@@ -202,10 +223,17 @@ const EditCutomer = (props) => {
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
-                {noChange && (
+                {!isChanged && (
                   <Grid item lg={12} md={12} sx={12}>
                     <Typography color="error" sx={{ ml: 2 }}>
                       No changes
+                    </Typography>
+                  </Grid>
+                )}
+                {!isConfirmed && (
+                  <Grid item lg={12} md={12} sx={12}>
+                    <Typography color="error" sx={{ ml: 2 }}>
+                      Password no confirmed.
                     </Typography>
                   </Grid>
                 )}
@@ -302,7 +330,7 @@ const EditCutomer = (props) => {
                             <TextField
                               fullWidth
                               name="password"
-                              onChange={handleChange}
+                              //onChange={handleChange}
                               // required
                               value={values.password}
                               variant="outlined"
@@ -321,7 +349,7 @@ const EditCutomer = (props) => {
                               name="newPassword"
                               onChange={handleChange}
                               // required
-
+                              value={values.newPassword}
                               variant="outlined"
                             />
                           </Grid>
@@ -338,7 +366,7 @@ const EditCutomer = (props) => {
                               name="confirmNewPassword"
                               onChange={handleChange}
                               // required
-
+                              value={values.confirmNewPassword}
                               variant="outlined"
                             />
                           </Grid>
@@ -352,21 +380,35 @@ const EditCutomer = (props) => {
             <Divider />
 
             <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  p: 2,
-                  ml:3,
-                  mr:3,
-                }}
-              >
-                <Button color="success" variant="contained" onClick={handleSaveClick}>
-                  Save details
-                </Button>
-                <Button color="success" variant="contained" onClick={handleCancelClick}>
-                  Cancel
-                </Button>
-              </Box>
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                p: 2,
+                ml: 3,
+                mr: 3,
+              }}
+            >
+              <Button color="success" variant="contained" onClick={handleSaveClick}>
+                Save details
+              </Button>
+              {!isChanged && (
+                <Grid item lg={12} md={12} sx={12}>
+                  <Typography color="error" sx={{ ml: 2 }}>
+                    No changes
+                  </Typography>
+                </Grid>
+              )}
+              {!isConfirmed && (
+                <Grid item lg={12} md={12} sx={12}>
+                  <Typography color="error" sx={{ ml: 2 }}>
+                    Password no confirmed.
+                  </Typography>
+                </Grid>
+              )}
+              <Button color="success" variant="contained" onClick={handleCancelClick}>
+                Cancel
+              </Button>
+            </Box>
           </Card>
         </Container>
       </Box>

@@ -7,8 +7,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createEmotionCache } from "../utils/create-emotion-cache";
 import { theme } from "../theme";
 const clientSideEmotionCache = createEmotionCache();
-//for use context
-import { AppWrapper } from "src/context/state";
+
 const App = (props) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
 
@@ -23,7 +22,7 @@ const App = (props) => {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <AppWrapper>{getLayout(<Component {...pageProps} />)}</AppWrapper>
+          {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>
       </LocalizationProvider>
     </CacheProvider>

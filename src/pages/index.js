@@ -14,8 +14,29 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { baseUrl } from "src/config";
+import { SignalCellularNull } from "@mui/icons-material";
+
+const AdminUserSignInUrl = `${baseUrl}/admin/auth/signin`;
 
 const Login = () => {
+  const [storageEmail, setStorateEmail] = useState('')
+  const [storagePassword, setStoragePassword] = useState('')
+  const [token, setToken] = useState(null)
+  useEffect(()=>{
+    if(typeof window !== "undefined"){
+      // console.log('token:',JSON.parse(localStorage.getItem('token')))
+      // console.log('email',JSON.parse(localStorage.getItem('email')).email)
+      // console.log('password:',JSON.parse(localStorage.getItem('password')).password)
+      if(localStorage.getItem('token') && localStorage.getItem('email') && localStorage.getItem('password')){
+        setToken(JSON.parse(localStorage.getItem('token')))
+        setStorateEmail(JSON.parse(localStorage.getItem('email')).email)
+        setStoragePassword(JSON.parse(localStorage.getItem('password')).password)
+      }
+    }
+  },[])
+ 
   // for "Add a customer" modal dialog
   const [open, setOpen] = useState(false);
   // for one time show modal-----------------
@@ -37,15 +58,46 @@ const Login = () => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
-      email: "demo@devias.io",
-      password: "Password123",
+      email: storageEmail,
+      password:storagePassword,
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
     onSubmit: () => {
-      router.push("/dashboard");
+      if (token==null) {
+        // console.log('log in page:please sign up and token:',token)
+        
+        // there is no token, so go to register page
+        router.push("/register");
+      } else {
+        // console.log('token',token)
+        // email and password validation for inputed
+        if(formik.values.email == storageEmail && formik.values.password == storagePassword){
+          axios
+          .post(`${AdminUserSignInUrl}`, token)
+          .then((res) => {
+            // console.log('sign in res:',res)
+            if (res.data.status) {
+              //receive data: 1
+              // console.log("admin sign in res:",res.data);
+              router.push("/dashboard"); // go to dashboard page
+            } else {
+              // do modal for problem
+              // console.log("sign in failed. you are deleted.")
+              router.push('/register')
+            }
+          })
+          .catch((err) => console.log(err));
+        } else{
+          //retry enter the info
+          // console.log('Retype your name and password.')
+          //router.push('#')
+          router.reload()
+        }
+        
+      }
     },
   });
 

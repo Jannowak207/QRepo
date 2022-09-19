@@ -22,8 +22,7 @@ import { red } from "@mui/material/colors";
 import CustomerInfo from "src/components/customer/customer-info";
 import axios from "axios";
 import { baseUrl } from "src/config";
-// for use context
-import { useAppContext } from "src/context/state";
+
 
 const customerServerUrl = `${baseUrl}/admin/customer`;
 
@@ -50,9 +49,7 @@ const getMuiTheme = () =>
   });
 
 const Customers = (props) => {
-  // for use context
-  const mycontext = useAppContext();
-  console.log("myconext.id:", mycontext.id);
+
 
   const router = useRouter();
   const [rowData, setRowData] = useState({});
@@ -101,7 +98,7 @@ const Customers = (props) => {
   ];
   const [tabledata, settabledata] = useState([]);
   useEffect(() => {
-    console.log("mounted");
+    // console.log("mounted");
     getCustomerList();
   }, []);
   const getCustomerList = () => {
@@ -114,8 +111,8 @@ const Customers = (props) => {
         },
       })
       .then((res) => {
-        console.log("res:", res);
-        console.log("res.data:", res.data);
+        // console.log("res:", res);
+        // console.log("res.data:", res.data);
         settabledata(res.data);
       })
       .catch((err) => {

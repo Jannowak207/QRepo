@@ -92,8 +92,8 @@ export const QRGenOptions = (props) => {
   // }
 
   const handlePattern = (event, key) => {
-    console.log(event.target);
-    console.log("key index:", key);
+    // console.log(event.target);
+    // console.log("key index:", key);
   };
 
   return (

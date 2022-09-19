@@ -75,7 +75,7 @@ const AddCutomer = () => {
       addData.email == "" ||
       addData.password == ""
     ) {
-      console.log("all fields required.");
+      // console.log("all fields required.");
       setOkAllFields(false);
     } else {
       AddCustomer(addData);

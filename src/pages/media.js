@@ -9,7 +9,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 //////////////////////////
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import PropTypes from "prop-types";
 import { format } from "date-fns";
@@ -37,6 +37,33 @@ import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
 import { RouterOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { baseUrl } from "src/config";
+
+const mediaServerUrl = `${baseUrl}/admin/media`;
+
+const getMuiTheme = () =>
+  createTheme({
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: "8px",
+            // backgroundColor: "#CDCAC6",
+            borderBottom: "1px solid #CDCAC6",
+            cursor: "pointer",
+          },
+        },
+      },
+      MuiToolbar: {
+        styleOverrides: {
+          regular: {
+            minHeight: "8px",
+          },
+        },
+      },
+    },
+  });
 
 const Medias = () => {
   const router = useRouter();
@@ -45,59 +72,73 @@ const Medias = () => {
   const rowMeta = {};
   const onRowClicked = (rowData, rowMeta) => {
     //row click routine
-    console.log("row clicked.");
-    console.log("rowData:" + rowData);
-    console.log("rowMeta:" + rowMeta);
-    router.push("/edit/media");
+    // console.log("media row data;", rowData[0])
+    router.push({
+      pathname: "/edit/media",
+      query: { id: rowData[0] },
+    });
   };
 
-  const columns = ["ID", "File Name", "Type", "Url", "Size", "Date"];
-  const data = [
-    ["1", "Movie 1", "movie", "url 1", "320MB", "9-1-2022"],
-    ["2", "Audio 19", "audio", "url 10", "5MB", "9-1-2022"],
-    ["3", "Movie 3", "movie", "url 5", "90MB", "5-1-2000"],
-    ["4", "Audio 2", "audio", "url 8", "9MB", "9-1-2022"],
-    ["5", "Movie 6", "movie", "url 90", "321MB", "9-8-2017"],
-    ["6", "Movie 22", "movie", "url 7", "333MB", "9-18-2019"],
-    ["7", "Audio 2", "audio", "url 12", "11MB", "7-1-2019"],
-    ["8", "Movie 3", "movie", "url 4", "85MB", "8-1-2015"],
-    ["9", "Movie 4", "movie", "url 9", "9MB", "6-15-2012"],
-    ["1", "Movie 1", "movie", "url 1", "320MB", "9-1-2022"],
-    ["2", "Audio 19", "audio", "url 10", "5MB", "9-1-2022"],
-    ["3", "Movie 3", "movie", "url 5", "90MB", "5-1-2000"],
-    ["4", "Audio 2", "audio", "url 8", "9MB", "9-1-2022"],
-    ["5", "Movie 6", "movie", "url 90", "321MB", "9-8-2017"],
-    ["6", "Movie 22", "movie", "url 7", "333MB", "9-18-2019"],
-    ["7", "Audio 2", "audio", "url 12", "11MB", "7-1-2019"],
-    ["8", "Movie 3", "movie", "url 4", "85MB", "8-1-2015"],
-    ["9", "Movie 4", "movie", "url 9", "9MB", "6-15-2012"],
+  const onAddButtonClicked = () => {
+    router.push("/add/media");
+  };
+  const columns = [
+    {
+      label:"ID",
+      name:"_id",
+      options:{
+        display:false
+      }
+    }, 
+    {
+      label:"File Name",
+      name:"file_name",
+    },
+    {
+      label:"Type",
+      name:"file_type",
+    },
+    {
+      label:"Url",
+      name:"file_url",
+    },
+    {
+      label:"Size",
+      name:"file_size",
+    },
+    {
+      label:"Uploaded At",
+      name:"created_at"
+    }
   ];
+  const [tabledata, settabledata] = useState([]);
+  useEffect(() => {
+    // console.log("mounted");
+    getMediaList();
+  }, []);
+  const getMediaList = () => {
+    axios
+      .get(`${mediaServerUrl}/list`, {
+        params: {
+
+        },
+      })
+      .then((res) => {
+        // console.log("res:", res);
+        // console.log("res.data:", res.data);
+        settabledata(res.data);
+        // console.log("tabledata:",tabledata)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
   const options = {
     filterType: "checkbox",
+    selectableRows:"none",//for none display checkbox before every table row
     onRowClick: onRowClicked,
   };
-  const getMuiTheme = () =>
-    createTheme({
-      components: {
-        MuiTableCell: {
-          styleOverrides: {
-            root: {
-              padding: "8px",
-              // backgroundColor: "#CDCAC6",
-              borderBottom:"1px solid #CDCAC6",
-              cursor:"pointer",
-            },
-          },
-        },
-        MuiToolbar: {
-          styleOverrides: {
-            regular: {
-              minHeight: "8px",
-            },
-          },
-        },
-      },
-    });
 
   return (
     <>
@@ -124,7 +165,7 @@ const Medias = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={onRowClicked}>
+                  <Button color="primary" variant="contained" onClick={onAddButtonClicked}>
                     Add a media
                   </Button>
                 </Box>
@@ -134,7 +175,7 @@ const Medias = () => {
               <ThemeProvider theme={getMuiTheme()}>
                 <MUIDataTable
                   title={"Media Library"}
-                  data={data}
+                  data={tabledata}
                   columns={columns}
                   options={options}
                 />

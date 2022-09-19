@@ -28,9 +28,9 @@ export const MediaList = ({ medias, ...rest }) => {
   const rowMeta = {};
   const onRowClicked = (rowData, rowMeta) => {
     //row click routine
-    console.log("row clicked.");
-    console.log("rowData:" + rowData);
-    console.log("rowMeta:" + rowMeta);
+    // console.log("row clicked.");
+    // console.log("rowData:" + rowData);
+    // console.log("rowMeta:" + rowMeta);
     router.push("#");
   };
 
