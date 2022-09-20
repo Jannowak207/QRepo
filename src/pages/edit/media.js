@@ -292,11 +292,17 @@ const EditMedia = (props) => {
                 m: 0,
               }}
             >
-              <Typography variant="h5" sx={{ m: 3 }}>
+              <Typography variant="h5" 
+              sx={{ m: 3 }}>
                 Media Details
               </Typography>
               <Box>
-                <Button color="success" variant="contained" onClick={onCancelClicked} sx={{ height: 30, mr: 3 }}>
+                <Button
+                  color="success"
+                  variant="contained"
+                  onClick={onCancelClicked}
+                  sx={{ height: 30, mr: 3 }}
+                >
                   Go to Library
                 </Button>
                 <Button
@@ -311,16 +317,26 @@ const EditMedia = (props) => {
               </Box>
             </Box>
             {noChange && (
-              <Grid item lg={12} md={12} sx={12} sx={{ ml: 3 }}>
-                <Typography color="error" variant="h6">
-                  No changes! Select new file please.
-                </Typography>
+              <Grid item 
+              lg={12} 
+              md={12} 
+              sx={12}>
+                <Box sx={{ ml: 3 }}>
+                  <Typography color="error"
+                  variant="h6">
+                    No changes! Select new file please.
+                  </Typography>
+                </Box>
               </Grid>
             )}
             <Divider />
             <CardContent>
-              <Grid container spacing={3}>
-                <Grid item lg={6} md={6} sx={12}>
+              <Grid container 
+              spacing={3}>
+                <Grid item 
+                lg={6} 
+                md={6} 
+                sx={12}>
                   <TextField
                     //autoFocus
                     aria-readonly
@@ -335,7 +351,10 @@ const EditMedia = (props) => {
                     // onChange={handleChange}
                   />
                 </Grid>
-                <Grid item lg={6} md={6} sx={12}>
+                <Grid item 
+                lg={6} 
+                md={6} 
+                sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -350,7 +369,10 @@ const EditMedia = (props) => {
                   />
                 </Grid>
 
-                <Grid item lg={6} md={6} sx={12}>
+                <Grid item 
+                lg={6} 
+                md={6} 
+                sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -363,7 +385,10 @@ const EditMedia = (props) => {
                     value={mediaData.fileUrl}
                   />
                 </Grid>
-                <Grid item lg={6} md={6} sx={12}>
+                <Grid item 
+                lg={6} 
+                md={6} 
+                sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -378,8 +403,13 @@ const EditMedia = (props) => {
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container spacint={3} my={3}>
-                <Grid item lg={6} md={6} sx={12}>
+              <Grid container 
+              spacint={3} 
+              my={3}>
+                <Grid item 
+                lg={6} 
+                md={6} 
+                sx={12}>
                   <Typography variant="button">Options</Typography>
                   <Accordion
                     expanded={expanded === "panel1"}
@@ -391,20 +421,13 @@ const EditMedia = (props) => {
                       id="panel1bh-header"
                     >
                       <QrCodeScannerIcon />
-                      <Typography variant="button" ml={2}>
+                      <Typography variant="button" 
+                      ml={2}>
                         Choose patterns
                       </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>Data Patterns</Typography>
-                      {/* {patterns.map((pattern, key) => (
-                        <QRGenOptionCard
-                          option={pattern}
-                          onClick={(event) => handlePattern(event, key)}
-                          key={key}
-                          parentCallback={onDotTypeChange}
-                        />
-                      ))} */}
 
                       <Button
                         sx={{ p: 0, my: 2 }}
@@ -506,24 +529,30 @@ const EditMedia = (props) => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>Eye Patterns</Typography>
-                      {/* {eyes.map((eye) => (
-                        <QRGenOptionCard option={eye} key={eye.id} />
-                      ))} */}
 
-                      {/* for eye dot type */}
-                      <Button variant="outlined" onClick={onSetEyeType} value="dot.dot">
+                      <Button variant="outlined" 
+                      onClick={onSetEyeType} 
+                      value="dot.dot">
                         dot.dot
                       </Button>
-                      <Button variant="outlined" onClick={onSetEyeType} value="dot.square">
+                      <Button variant="outlined" 
+                      onClick={onSetEyeType} 
+                      value="dot.square">
                         dot.square
                       </Button>
-                      <Button variant="outlined" onClick={onSetEyeType} value="dot.extra-rounded">
+                      <Button variant="outlined" 
+                      onClick={onSetEyeType} 
+                      value="dot.extra-rounded">
                         dot.extra-rounded
                       </Button>
-                      <Button variant="outlined" onClick={onSetEyeType} value="square.dot">
+                      <Button variant="outlined" 
+                      onClick={onSetEyeType} 
+                      value="square.dot">
                         dot.dot
                       </Button>
-                      <Button variant="outlined" onClick={onSetEyeType} value="square.square">
+                      <Button variant="outlined" 
+                      onClick={onSetEyeType} 
+                      value="square.square">
                         dot.square
                       </Button>
                       <Button
@@ -545,7 +574,8 @@ const EditMedia = (props) => {
                       id="panel3bh-header"
                     >
                       <PortraitIcon fontSize="medium" />
-                      <Typography variant="button" ml={2}>
+                      <Typography variant="button" 
+                      ml={2}>
                         Add logo
                       </Typography>
                     </AccordionSummary>
@@ -563,7 +593,8 @@ const EditMedia = (props) => {
                       id="panel4bh-header"
                     >
                       <BrushIcon />
-                      <Typography variant="button" ml={2}>
+                      <Typography variant="button" 
+                      ml={2}>
                         Set colors
                       </Typography>
                     </AccordionSummary>
@@ -571,53 +602,20 @@ const EditMedia = (props) => {
                       <SetColor parentCallback={onSetQRColors} />
                     </AccordionDetails>
                   </Accordion>
-                  {/* <Accordion
-                    expanded={expanded === "panel5"}
-                    onChange={handleAccordianChange("panel5")}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel5bh-content"
-                      id="panel5bh-header"
-                    >
-                      <FilterFramesIcon />
-                      <Typography variant="button" ml={2}>
-                        Choose frame (optional)
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {frames.map((frame) => (
-                        <QRGenOptionCard option={frame} key={frame.id} />
-                      ))}
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    expanded={expanded === "panel6"}
-                    onChange={handleAccordianChange("panel6")}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel6bh-content"
-                      id="panel6bh-header"
-                    >
-                      <QrCode2Icon />
-                      <Typography variant="button" ml={2}>
-                        Templates (optional)
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {templates.map((template) => (
-                        <QRGenOptionCard option={template} key={template.id} />
-                      ))}
-                    </AccordionDetails>
-                  </Accordion> */}
                 </Grid>
                 <Grid item lg={6} md={6} sx={12}>
                   {/* for qr code---------------------------------------------------------------------- */}
-                  <Grid container spacing={0} direction="column" alignItems="center">
-                    <Grid item lg={12} md={12} sx={12}>
+                  <Grid container 
+                  spacing={0} 
+                  direction="column" 
+                  alignItems="center">
+                    <Grid item 
+                    lg={12} 
+                    md={12} 
+                    sx={12}>
                       <Box>
-                        <Box sx={{ width: "90%" }} ref={ref} />
+                        <Box sx={{ width: "90%" }} 
+                        ref={ref} />
                       </Box>
                     </Grid>
                   </Grid>
@@ -630,11 +628,6 @@ const EditMedia = (props) => {
                       m: 3,
                     }}
                   >
-                    {/* <select onChange={onExtensionChange} value={fileExt}>
-                          <option value="png">PNG</option>
-                          <option value="jpeg">JPEG</option>
-                          <option value="webp">WEBP</option>
-                        </select> */}
                     <Select
                       value={fileExt}
                       defaultValue={fileExt}
@@ -646,51 +639,15 @@ const EditMedia = (props) => {
                       <MenuItem value="jpeg">JPEG</MenuItem>
                       <MenuItem value="webp">WEBP</MenuItem>
                     </Select>
-                    <Button variant="contained" color="secondary" onClick={onDownloadClick}>
+                    <Button variant="contained" 
+                    color="secondary" 
+                    onClick={onDownloadClick}>
                       Download
                     </Button>
                   </Box>
                 </Grid>
               </Grid>
             </CardContent>
-            {/* <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                p: 2,
-                alignItems: "center",
-                ml: 2,
-                mr: 5,
-              }}
-            >
-              <Grid container>
-                <Grid item lg={1.5} md={12} sx={12}>
-                  <Button
-                    sx={{ ml: 1 }}
-                    color="success"
-                    variant="contained"
-                    onClick={handleSave}
-                    fullWidth
-                  >
-                    Save
-                  </Button>
-                </Grid>
-                <Grid item lg={3} md={12} sx={12}>
-                  {noChange && (
-                    <Typography color="error" fullWidth my={1} ml={4}>
-                      No changes! Select new file please.
-                    </Typography>
-                  )}
-                </Grid>
-                <Grid item lg={1.5} md={12} sx={12}>
-                  <Button color="success" variant="contained" onClick={onCancelClicked} fullWidth>
-                    Cancel
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box> */}
           </Card>
         </Container>
       </Box>
@@ -699,17 +656,3 @@ const EditMedia = (props) => {
 };
 EditMedia.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default EditMedia;
-// //------ for qr code ------------------------------------------------------------------------
-// const styles = {
-//   inputWrapper: {
-//     margin: "20px 0",
-//     display: "flex",
-//     justifyContent: "space-between",
-//     width: "100%",
-//   },
-//   inputBox: {
-//     flexGrow: 1,
-//     marginRight: 20,
-//   },
-// };
-// // ----------end for qr code -----------------------------------------------------------------

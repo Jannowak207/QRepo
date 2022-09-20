@@ -13,10 +13,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import axios from "axios";
 import { baseUrl } from "src/config";
-import { useState } from "react";
 
 const AdminUserSignUpUrl = `${baseUrl}/admin/auth/signup`;
 
@@ -38,18 +36,17 @@ const Register = () => {
       policy: Yup.boolean().oneOf([true], "This field must be checked"),
     }),
     onSubmit: () => {
-      //axios post to register admin
-      // console.log("sign up now clicked.");
       axios
         .post(`${AdminUserSignUpUrl}`, formik)
         .then((res) => {
           if (res.data.status) {
-            // console.log('sign up res:',res.data)
-            //receive data: id
             if (typeof window !== "undefined") {
-              localStorage.setItem("token",JSON.stringify({id:res.data.data}));
-              localStorage.setItem("email",JSON.stringify({email: formik.values.email}));
-              localStorage.setItem("password",JSON.stringify({password: formik.values.password}));
+              localStorage.setItem("token", JSON.stringify({ id: res.data.data }));
+              localStorage.setItem("email", JSON.stringify({ email: formik.values.email }));
+              localStorage.setItem(
+                "password",
+                JSON.stringify({ password: formik.values.password })
+              );
             }
 
             router.push("/"); // go to log in page
@@ -78,10 +75,13 @@ const Register = () => {
         <Container maxWidth="sm">
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
-              <Typography color="textPrimary" variant="h4">
+              <Typography color="textPrimary" 
+              variant="h4">
                 Create a new account
               </Typography>
-              <Typography color="textSecondary" gutterBottom variant="body2">
+              <Typography color="textSecondary" 
+              gutterBottom 
+              variant="body2">
                 Use your email to create a new account
               </Typography>
             </Box>
@@ -147,10 +147,14 @@ const Register = () => {
                 name="policy"
                 onChange={formik.handleChange}
               />
-              <Typography color="textSecondary" variant="body2">
+              <Typography color="textSecondary" 
+              variant="body2">
                 I have read the{" "}
-                <NextLink href="#" passHref>
-                  <Link color="primary" underline="always" variant="subtitle2">
+                <NextLink href="#" 
+                passHref>
+                  <Link color="primary" 
+                  underline="always" 
+                  variant="subtitle2">
                     Terms and Conditions
                   </Link>
                 </NextLink>
@@ -171,10 +175,13 @@ const Register = () => {
                 Sign Up Now
               </Button>
             </Box>
-            <Typography color="textSecondary" variant="body2">
+            <Typography color="textSecondary" 
+            variant="body2">
               Have an account?{" "}
-              <NextLink href="/" passHref>
-                <Link variant="subtitle2" underline="hover">
+              <NextLink href="/" 
+              passHref>
+                <Link variant="subtitle2" 
+                underline="hover">
                   Sign In
                 </Link>
               </NextLink>

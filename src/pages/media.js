@@ -1,41 +1,10 @@
 import Head from "next/head";
-import { Box, Container, Grid, Pagination } from "@mui/material";
-import { medias } from "../__mocks__/medias";
-import { MediaListToolbar } from "../components/media/media-list-toolbar";
-import { MediaList } from "../components/media/media-list";
+import { Box, Container, Grid } from "@mui/material";
 import { DashboardLayout } from "../components/dashboard-layout";
-import NextLink from "next/link";
-import AddIcon from "@mui/icons-material/Add";
-
-//////////////////////////
-
 import { useState, useEffect } from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
-import PropTypes from "prop-types";
-import { format } from "date-fns";
-import {
-  Avatar,
-  Button,
-  Card,
-  Checkbox,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TablePagination,
-  TableRow,
-  TextField,
-  Typography,
-} from "@mui/material";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-
+import { Button } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
-import { RouterOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { baseUrl } from "src/config";
@@ -71,8 +40,6 @@ const Medias = () => {
   const rowData = [];
   const rowMeta = {};
   const onRowClicked = (rowData, rowMeta) => {
-    //row click routine
-    // console.log("media row data;", rowData[0])
     router.push({
       pathname: "/edit/media",
       query: { id: rowData[0] },
@@ -84,59 +51,53 @@ const Medias = () => {
   };
   const columns = [
     {
-      label:"ID",
-      name:"_id",
-      options:{
-        display:false
-      }
-    }, 
-    {
-      label:"File Name",
-      name:"file_name",
+      label: "ID",
+      name: "_id",
+      options: {
+        display: false,
+      },
     },
     {
-      label:"Type",
-      name:"file_type",
+      label: "File Name",
+      name: "file_name",
     },
     {
-      label:"Url",
-      name:"file_url",
+      label: "Type",
+      name: "file_type",
     },
     {
-      label:"Size",
-      name:"file_size",
+      label: "Url",
+      name: "file_url",
     },
     {
-      label:"Uploaded At",
-      name:"created_at"
-    }
+      label: "Size",
+      name: "file_size",
+    },
+    {
+      label: "Uploaded At",
+      name: "created_at",
+    },
   ];
   const [tabledata, settabledata] = useState([]);
   useEffect(() => {
-    // console.log("mounted");
     getMediaList();
   }, []);
   const getMediaList = () => {
     axios
       .get(`${mediaServerUrl}/list`, {
-        params: {
-
-        },
+        params: {},
       })
       .then((res) => {
-        // console.log("res:", res);
-        // console.log("res.data:", res.data);
         settabledata(res.data);
-        // console.log("tabledata:",tabledata)
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  
+
   const options = {
     filterType: "checkbox",
-    selectableRows:"none",//for none display checkbox before every table row
+    selectableRows: "none", //for none display checkbox before every table row
     onRowClick: onRowClicked,
   };
 
@@ -153,8 +114,13 @@ const Medias = () => {
         }}
       >
         <Container maxWidth={false}>
-          <Grid container spacing={3}>
-            <Grid item xl={12} lg={12} sm={12} xs={12}>
+          <Grid container 
+          spacing={3}>
+            <Grid item 
+            xl={12} 
+            lg={12} 
+            sm={12} 
+            xs={12}>
               <Box
                 sx={{
                   alignItems: "center",
@@ -165,13 +131,19 @@ const Medias = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={onAddButtonClicked}>
+                  <Button color="primary" 
+                  variant="contained" 
+                  onClick={onAddButtonClicked}>
                     Add a media
                   </Button>
                 </Box>
               </Box>
             </Grid>
-            <Grid item xl={12} lg={12} sm={12} xs={12}>
+            <Grid item 
+            xl={12} 
+            lg={12} 
+            sm={12} 
+            xs={12}>
               <ThemeProvider theme={getMuiTheme()}>
                 <MUIDataTable
                   title={"Media Library"}

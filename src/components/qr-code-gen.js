@@ -25,11 +25,18 @@ const QRCodeGen = (props) => {
         <QRGenToolbar parentCallback={handleCallback} 
         url={props.url}/>
         <Box sx={{ mt: 1 }}>
-          <Grid container spacing={1}>
-            <Grid item lg={6} md={6} xs={12}>
+          <Grid container 
+          spacing={1}>
+            <Grid item 
+            lg={6} 
+            md={6} 
+            xs={12}>
               <QRGenOptions />
             </Grid>
-            <Grid item lg={6} md={6} xs={12}>
+            <Grid item 
+            lg={6} 
+            md={6} 
+            xs={12}>
               {/* name=value format */}
               <QRGenMain url={props.url} />
             </Grid>

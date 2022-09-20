@@ -32,11 +32,16 @@ const QRCodeGen = () => {
           {/* from this child component receive qr result */}
           <QRGenToolbar parentCallback={handleCallback} />
           <Box sx={{ mt: 3 }}>
-            <Typography sx={{ mb: 3 }} variant="h4">
+            <Typography sx={{ mb: 3 }} 
+            variant="h4">
               Options
             </Typography>
-            <Grid container spacing={2}>
-              <Grid item lg={6} md={6} xs={12}>
+            <Grid container 
+            spacing={2}>
+              <Grid item 
+              lg={6}
+               md={6} 
+               xs={12}>
                 <QRGenOptions />
               </Grid>
               <Grid item lg={6} md={6} xs={12}>
@@ -46,7 +51,11 @@ const QRCodeGen = () => {
             </Grid>
             <NextLink href="/media" 
             passHref>
-              <Button sx={{mt:2}} variant="contained" color="success">Go back to media library</Button>
+              <Button sx={{mt:2}} 
+              variant="contained" 
+              color="success">
+                Go back to media library
+              </Button>
             </NextLink>
           </Box>
         </Container>

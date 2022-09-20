@@ -98,8 +98,13 @@ const Managers = () => {
         }}
       >
         <Container maxWidth={false}>
-          <Grid container spacing={3}>
-            <Grid item xl={12} lg={12} sm={12} xs={12}>
+          <Grid container 
+          spacing={3}>
+            <Grid item 
+            xl={12} 
+            lg={12} 
+            sm={12} 
+            xs={12}>
               <Box
                 sx={{
                   alignItems: "center",
@@ -110,15 +115,24 @@ const Managers = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" variant="contained" onClick={onRowClicked}>
+                  <Button color="primary" 
+                  variant="contained" 
+                  onClick={onRowClicked}>
                     Add a manager
                   </Button>
                 </Box>
               </Box>
             </Grid>
-            <Grid item xl={12} lg={12} sm={12} xs={12}>
+            <Grid item 
+            xl={12} 
+            lg={12} 
+            sm={12} 
+            xs={12}>
               <ThemeProvider theme={getMuiTheme()}>
-                <MUIDataTable title={"Customers"} data={data} columns={columns} options={options} />
+                <MUIDataTable title={"Customers"} 
+                data={data} 
+                columns={columns} 
+                options={options} />
               </ThemeProvider>
             </Grid>
           </Grid>

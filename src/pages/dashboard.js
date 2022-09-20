@@ -30,33 +30,7 @@ const Dashboard = () => (
           container
           spacing={3}
         >
-          {/* <Grid
-            item
-            lg={4}
-            sm={12}
-            xl={4}
-            xs={12}
-          >
-            <TotalScans />
-          </Grid>
-          <Grid
-            item
-            xl={4}
-            lg={4}
-            sm={12}
-            xs={12}
-          >
-            <QRCampaignsRemaining />
-          </Grid>
-          <Grid
-            item
-            xl={4}
-            lg={4}
-            sm={12}
-            xs={12}
-          >
-            <TotalQRCampaigns />
-          </Grid> */}
+          
           <Grid
             item
             xl={12}
@@ -75,42 +49,6 @@ const Dashboard = () => (
           >
             <WatchList />
           </Grid>
-          {/* <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <LatestQRCodes />
-          </Grid>
-          <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <QRCodesByDevice sx={{ height: '100%' }} />
-          </Grid> */}
-          {/* <Grid
-            item
-            lg={4}
-            md={6}
-            xl={3}
-            xs={12}
-          >
-            <LatestProducts sx={{ height: '100%' }} />
-          </Grid>
-          <Grid
-            item
-            lg={8}
-            md={12}
-            xl={9}
-            xs={12}
-          >
-            <LatestOrders />
-          </Grid> */}
         </Grid>
       </Container>
     </Box>

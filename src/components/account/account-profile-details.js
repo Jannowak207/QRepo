@@ -4,7 +4,6 @@ import {
   Button,
   Card,
   CardContent,
-  CardHeader,
   Divider,
   Grid,
   Tab,
@@ -12,34 +11,36 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+//for modal dialog
+// for modal dlg
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
 import { useRouter } from "next/router";
 import axios from "axios";
 import { baseUrl } from "src/config";
+
+//for validate
 const isConfirmed = true;
 const isChanged = false;
 const adminInfoUrl = `${baseUrl}/admin/auth`;
 
-const states = [
-  {
-    value: "alabama",
-    label: "Alabama",
-  },
-  {
-    value: "new-york",
-    label: "New York",
-  },
-  {
-    value: "san-francisco",
-    label: "San Francisco",
-  },
-];
-
 export const AccountProfileDetails = (props) => {
   const router = useRouter();
-  //for no change
-  // const [isChanged, setIsChanged] = useState(true);
-  //for confirm password
-  // const [isConfirmed, setIsConfirmed] = useState(true);
+
+  //for modal
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClickClose = () => {
+    setOpen(false);
+  };
+
   const [values, setValues] = useState({
     _id: null,
     first_name: "",
@@ -94,8 +95,10 @@ export const AccountProfileDetails = (props) => {
   const saveAccount = () => {
     if (JSON.stringify(values) == JSON.stringify(tempValues)) {
       isChanged = false;
+      setOpen(true);
     } else {
       isChanged = true;
+      setOpen(false);
     }
     console.log("newPassword:", values.newPassword);
     if (values.newPassword != "" && values.newPassword == values.confirmNewPassword) {
@@ -103,8 +106,10 @@ export const AccountProfileDetails = (props) => {
       console.log("here ", values);
       values.password = values.newPassword;
       isConfirmed = true;
+      setOpen(false);
     } else {
       isConfirmed = false;
+      setOpen(true);
     }
     if (isChanged) {
       let editData = {
@@ -124,8 +129,6 @@ export const AccountProfileDetails = (props) => {
           .then((res) => {
             console.log(res.data.data);
             if (res.data.status) {
-              //setValues(res.data.data);// memory leak
-              // change the localstorage
               if (typeof window !== "undefined") {
                 localStorage.removeItem("email");
                 localStorage.setItem("email", JSON.stringify({ email: res.data.data.email }));
@@ -150,6 +153,28 @@ export const AccountProfileDetails = (props) => {
   };
   return (
     <form autoComplete="off" noValidate {...props}>
+      <Dialog open={open} onClose={handleClickClose}>
+        <DialogTitle color="error">Note</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {!isChanged && (
+              <Typography variant="subtitle1">
+                There is no changed information. Please input different information.
+              </Typography>
+            )}
+            {!isConfirmed && (
+              <Typography variant="subtitle1">
+                Please confirm your new password.
+              </Typography>
+            )}
+          </DialogContentText>
+          <Divider />
+          <Button variant="outlined" onClick={handleClickClose} sx={{ mt: 2, width: "30%" }}>
+            OK
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <Tabs value={tabIndex} onChange={handleTabChange} sx={{ mt: 2 }}>
           <Tab label="My Profile" />
@@ -193,46 +218,21 @@ export const AccountProfileDetails = (props) => {
                   variant="outlined"
                 />
               </Grid>
-              {/* <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Phone Number"
-                  name="phone"
-                  onChange={handleChange}
-                  type="number"
-                  value={values.phone}
-                  variant="outlined"
-                />
-              </Grid> */}
-              {/* <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Country"
-                  name="country"
-                  onChange={handleChange}
-                  required
-                  value={values.country}
-                  variant="outlined"
-                />
-              </Grid> */}
-              {/* <Grid item md={6} xs={12}>
-                <TextField
-                  fullWidth
-                  label="Select State"
-                  name="state"
-                  onChange={handleChange}
-                  required
-                  select
-                  SelectProps={{ native: true }}
-                  value={values.state}
-                  variant="outlined"
-                >
-                  {states.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </TextField>
+              {/* <Grid
+                item
+                lg={12}
+                md={12}
+                xs={12}
+                sx={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                {!isChanged && (
+                  <Typography variant="body1" 
+                  mt={1}
+                  mr={4} 
+                  color="error">
+                    No changes.
+                  </Typography>
+                )}
               </Grid> */}
             </Grid>
           )}
@@ -271,6 +271,14 @@ export const AccountProfileDetails = (props) => {
                 value={values.confirmNewPassword}
                 variant="outlined"
               />
+              {/* {!isConfirmed && (
+                <Typography variant="body1" 
+                mt={1} 
+                mr={4} 
+                color="error">
+                  Please confirm your password.
+                </Typography>
+              )} */}
             </Box>
           )}
         </CardContent>
@@ -283,16 +291,6 @@ export const AccountProfileDetails = (props) => {
             mr: 1,
           }}
         >
-          {!isChanged && (
-            <Typography variant="body1" mt={1} mr={4} color="error">
-              No changes.
-            </Typography>
-          )}
-          {!isConfirmed && (
-            <Typography variant="body1" mt={1} mr={4} color="error">
-              Please confirm your password.
-            </Typography>
-          )}
           <Button color="primary" sx={{ mr: 3 }} variant="contained" onClick={saveAccount}>
             Save
           </Button>

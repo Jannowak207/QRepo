@@ -79,7 +79,8 @@ const EditManager = () => {
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ mb: 0 }} variant="h4">
+              <Typography sx={{ mb: 0 }} 
+              variant="h4">
                 Manager Settings
               </Typography>
               <Button
@@ -95,8 +96,12 @@ const EditManager = () => {
 
             <Divider />
             <CardContent>
-              <Grid container spacing={3}>
-                <Grid item lg={12} md={12} xs={12}>
+              <Grid container 
+              spacing={3}>
+                <Grid item 
+                lg={12} 
+                md={12} 
+                xs={12}>
                   <Box>
                     <Box>
                       <Tabs value={tabIndex} onChange={handleTabChange}>
@@ -106,8 +111,11 @@ const EditManager = () => {
                     </Box>
                     <Box sx={{ padding: 2 }}>
                       {tabIndex === 0 && (
-                        <Grid container spacing={3}>
-                          <Grid item md={6} sx={12}>
+                        <Grid container 
+                        spacing={3}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please specify the name"
@@ -119,7 +127,9 @@ const EditManager = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Email Address"
@@ -130,7 +140,9 @@ const EditManager = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Phone number"
@@ -141,7 +153,9 @@ const EditManager = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               label="Registered on:"
@@ -156,12 +170,18 @@ const EditManager = () => {
                       )}
                       {tabIndex === 1 && (
                         <Box>
-                          <Grid item md={6} sx={12}>
-                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
+                            <Typography sx={{ mt: 3 }} 
+                            variant="button" 
+                            gutterBottom>
                               Current Password:
                             </Typography>
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               // helperText="Please specify the name"
@@ -174,7 +194,9 @@ const EditManager = () => {
                             />
                           </Grid>
                           <Grid item md={6} sx={12}>
-                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
+                            <Typography sx={{ mt: 3 }} 
+                            variant="button" 
+                            gutterBottom>
                               New Password:
                             </Typography>
                           </Grid>
@@ -190,12 +212,18 @@ const EditManager = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item md={6} sx={12}>
-                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
+                            <Typography sx={{ mt: 3 }} 
+                            variant="button" 
+                            gutterBottom>
                               Confirm New Password:
                             </Typography>
                           </Grid>
-                          <Grid item md={6} sx={12}>
+                          <Grid item 
+                          md={6} 
+                          sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please re-enter new password"
@@ -223,7 +251,9 @@ const EditManager = () => {
                   p: 2,
                 }}
               >
-                <Button color="success" variant="contained" onClick={handleClick}>
+                <Button color="success" 
+                variant="contained" 
+                onClick={handleClick}>
                   Save details
                 </Button>
               </Box>

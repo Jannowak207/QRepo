@@ -1,5 +1,4 @@
 import Head from "next/head";
-import NextLink from "next/link";
 import {
   Avatar,
   Box,
@@ -9,13 +8,12 @@ import {
   CardContent,
   Container,
   Divider,
-  Drawer,
   Grid,
   Input,
   TextField,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
+import FormData from 'form-data';
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 // for qr options----------------------------------------------------------------
@@ -26,20 +24,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import PortraitIcon from "@mui/icons-material/Portrait";
 import BrushIcon from "@mui/icons-material/Brush";
-import FilterFramesIcon from "@mui/icons-material/FilterFrames";
-import QrCode2Icon from "@mui/icons-material/QrCode2";
-import { patterns } from "../../__mocks__/qr-code/patterns";
-import { eyes } from "../../__mocks__/qr-code/eyes";
-import { frames } from "../../__mocks__/qr-code/frames";
-import { templates } from "../../__mocks__/qr-code/templates";
-import { QRGenOptionCard } from "../../components/qr-code-gen/qr-gen-option-card";
 import FileInput from "../../components/qr-code-gen/file-input";
 import SetColor from "../../components/qr-code-gen/set-color";
 // end for qr options -------------------------------------------------------------
 import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
 import { useRouter } from "next/router";
-import QRCodeGen from "../../components/qr-code-gen";
 
 import QRCodeStyling, { dotTypes } from "qr-code-styling";
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -50,11 +40,6 @@ import { baseUrl } from "src/config";
 const qrCode = new QRCodeStyling({
   width: 500,
   height: 500,
-  //image: "https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg",
-  // dotsOptions: {
-  //   color: "#4267b2",
-  //   type: "rounded",
-  // },
   imageOptions: {
     crossOrigin: "anonymous",
     margin: 20,
@@ -103,11 +88,6 @@ const EditMedia = () => {
       cornersSquareOptions: { type: eyeType[1], color: eyeSquareColor },
       backgroundOptions: { color: backColor },
     });
-
-    // console.log("dotColor:" + dotColor);
-    // console.log("backColor:" + backColor);
-    // console.log("eyeDotColor:" + eyeDotColor);
-    // console.log("eyeSquareColor:" + eyeSquareColor);
   }, [url, dotType, eyeType, logoImage, dotColor, eyeDotColor, eyeSquareColor, backColor]);
   useEffect(() => {
     // console.log("dotColor changed.");
@@ -134,7 +114,6 @@ const EditMedia = () => {
     console.log("logo received.");
     setLogo(logoImg);
     logoImage = logoImg;
-    // console.log("received logo:" + logoImg);
   };
   const onSetQRColors = (colors) => {
     if (colors) {
@@ -146,7 +125,6 @@ const EditMedia = () => {
       setEyeDotColor(colors[2]);
       eyeSquareColor = colors[3];
       setEyeSqureColor(colors[3]);
-      console.log("recev:" + backColor + " " + dotColor + " " + eyeDotColor + " " + eyeSquareColor);
     }
   };
   const onUrlChange = (event) => {
@@ -163,82 +141,35 @@ const EditMedia = () => {
       extension: fileExt,
     });
   };
-  // end for qr code-----------------------------------------------------------------------------
-  // const AddMedia = (media) => {
-  //   console.log("media add:",media)
-  //   axios
-  //     .post(`${mediaAddUrl}`, media)
-  //     .then((res) => {
-  //       //  console.log(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+
   const [mediaData, setMediaData] = useState(new FormData());
   const [fileUrl, setFileUrl] = useState("");
 
   const handleChange = (e) => {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
-    // setMediaData({
-    //   ...mediaData,
-    //   fileName: event.target.value,
-    //   fileType: event.target.files[0].type,
-    //   fileSize: event.target.files[0].size,
-    //   fileUrl: URL.createObjectURL(event.target.files[0]).replace('blob:',''),
-    // });
-    // setUrl(event.target.value);
+
     setMediaData(formData);
   };
   const router = useRouter();
   //for input validate
   const [okAllFields, setOkAllFields] = useState(true);
-  const [isUploaded, setIsUploaded] = useState(false)
+  const [isUploaded, setIsUploaded] = useState(false);
   // for add buton clicked function
   const handleSave = () => {
     axios
       .post(mediaAddUrl, mediaData)
       .then((res) => {
-        // console.log("media file upload res.data:", res.data);
         if (res.data.status) {
-          setIsUploaded(true)
-          // console.log("res.data.status:", res.data.status);
+          setIsUploaded(true);
           setFileUrl(`${downloadUrl}/${res.data.data.file_name}`);
           setUrl(`${downloadUrl}/${res.data.data.file_name}`);
-          // console.log("file url:", res.data.data.file_name);
-          // console.log("file url:", fileUrl);
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    // save routine
-    // for validation
-    // let addData = {
-    //   file_name: mediaData.fileName,
-    //   file_type: mediaData.fileType,
-    //   file_size: mediaData.fileSize,
-    //   file_url: mediaData.fileUrl,
-    // };
-
-    // if (
-    //   addData.file_name == "" ||
-    //   addData.file_type == "" ||
-    //   addData.file_size == "" ||
-    //   addData.file_url == ""
-    // ) {
-    //   console.log("all fields required.");
-    //   setOkAllFields(false);
-    // } else {
-    // //  AddMedia(addData);
-
-    //   router.push("/media");
-    // }
   };
-  ////////////////////////////////////////////////////////////////////////
-
-  ////////////////////////////////////////////////////////////////////////
 
   const onCancelClicked = () => {
     router.push("/media");
@@ -258,14 +189,24 @@ const EditMedia = () => {
       >
         <Container maxWidth={false}>
           <Card>
-            <Typography variant="h5" sx={{ m: 3 }}>
-              Media Details
-            </Typography>
-            {!okAllFields && (
-              <Grid item lg={12} md={12} sx={12} sx={{ ml: 3 }}>
-                <Typography color="error">No selected media file.</Typography>
-              </Grid>
-            )}
+            <Box sx={{ display: "flex", justifyContent: "space-between", m: 3 }}>
+              <Typography variant="h5">Media Details</Typography>
+              {!okAllFields && (
+                <Grid item lg={12} md={12} sx={12}>
+                  <Box sx={{ ml: 3 }}>
+                    <Typography color="error">No selected media file.</Typography>
+                  </Box>
+                </Grid>
+              )}
+              <Button
+                color="success"
+                variant="contained"
+                onClick={onCancelClicked}
+                sx={{ height: 30, mr: 3 }}
+              >
+                Go to Library
+              </Button>
+            </Box>
             <Divider />
             <CardContent>
               <Grid container spacing={3}>
@@ -280,41 +221,11 @@ const EditMedia = () => {
                     fullWidth
                     variant="standard"
                     label="Media File"
-                    //value={mediaData.fileName}
                     onChange={handleChange}
                   />
                 </Grid>
-                {/* <Grid item lg={3} md={3} sx={12}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="filetype"
-                    type="text"
-                    fullWidth
-                    variant="standard"
-                    label="File Type"
-                    name="fileType"
-                    value={mediaData.fileType}
-                    onChange={handleChange}
-                  />
-                </Grid>
-                <Grid item lg={3} md={3} sx={12}>
-                  <TextField
-                    autoFocus
-                    margin="dense"
-                    id="size"
-                    type="number"
-                    fullWidth
-                    variant="standard"
-                    label="File Size"
-                    name="fileSize"
-                    value={mediaData.fileSize}
-                  />
-                </Grid>
-                <Divider />*/}
                 <Grid item lg={6} md={6} sx={12}>
                   <TextField
-                    //autoFocus
                     margin="dense"
                     id="url"
                     type="url"
@@ -323,7 +234,6 @@ const EditMedia = () => {
                     label="File URL"
                     name="fileUrl"
                     value={fileUrl}
-                    
                   />
                 </Grid>
                 <Grid item lg={4} md={12} sx={12}>
@@ -365,15 +275,6 @@ const EditMedia = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>Data Patterns</Typography>
-                      {/* {patterns.map((pattern, key) => (
-                        <QRGenOptionCard
-                          option={pattern}
-                          onClick={(event) => handlePattern(event, key)}
-                          key={key}
-                          parentCallback={onDotTypeChange}
-                        />
-                      ))} */}
-
                       <Button
                         sx={{ p: 0, my: 2 }}
                         onClick={onSetDotType}
@@ -474,11 +375,6 @@ const EditMedia = () => {
                     </AccordionSummary>
                     <AccordionDetails>
                       <Typography>Eye Patterns</Typography>
-                      {/* {eyes.map((eye) => (
-                        <QRGenOptionCard option={eye} key={eye.id} />
-                      ))} */}
-
-                      {/* for eye dot type */}
                       <Button variant="outlined" onClick={onSetEyeType} value="dot.dot">
                         dot.dot
                       </Button>
@@ -539,46 +435,6 @@ const EditMedia = () => {
                       <SetColor parentCallback={onSetQRColors} />
                     </AccordionDetails>
                   </Accordion>
-                  {/* <Accordion
-                    expanded={expanded === "panel5"}
-                    onChange={handleAccordianChange("panel5")}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel5bh-content"
-                      id="panel5bh-header"
-                    >
-                      <FilterFramesIcon />
-                      <Typography variant="button" ml={2}>
-                        Choose frame (optional)
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {frames.map((frame) => (
-                        <QRGenOptionCard option={frame} key={frame.id} />
-                      ))}
-                    </AccordionDetails>
-                  </Accordion>
-                  <Accordion
-                    expanded={expanded === "panel6"}
-                    onChange={handleAccordianChange("panel6")}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel6bh-content"
-                      id="panel6bh-header"
-                    >
-                      <QrCode2Icon />
-                      <Typography variant="button" ml={2}>
-                        Templates (optional)
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                      {templates.map((template) => (
-                        <QRGenOptionCard option={template} key={template.id} />
-                      ))}
-                    </AccordionDetails>
-                  </Accordion> */}
                 </Grid>
                 <Grid item lg={6} md={6} sx={12}>
                   {/* for qr code---------------------------------------------------------------------- */}
@@ -598,11 +454,6 @@ const EditMedia = () => {
                       m: 3,
                     }}
                   >
-                    {/* <select onChange={onExtensionChange} value={fileExt}>
-                          <option value="png">PNG</option>
-                          <option value="jpeg">JPEG</option>
-                          <option value="webp">WEBP</option>
-                        </select> */}
                     <Select
                       value={fileExt}
                       defaultValue={fileExt}
@@ -621,44 +472,6 @@ const EditMedia = () => {
                 </Grid>
               </Grid>
             </CardContent>
-            {/* <Divider />
-
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                p: 2,
-                alignItems: "center",
-                ml: 2,
-                mr: 5,
-              }}
-            >
-              <Grid container>
-                <Grid item lg={1.5} md={12} sx={12}>
-                  <Button
-                    sx={{ ml: 1 }}
-                    color="success"
-                    variant="contained"
-                    onClick={handleSave}
-                    fullWidth
-                  >
-                    Save
-                  </Button>
-                </Grid>
-                <Grid item lg={3} md={12} sx={12}>
-                  {!okAllFields && (
-                    <Typography color="error" fullWidth my={1} ml={4}>
-                      No selected media file.
-                    </Typography>
-                  )}
-                </Grid>
-                <Grid item lg={1.5} md={12} sx={12}>
-                  <Button color="success" variant="contained" onClick={onCancelClicked} fullWidth>
-                    Cancel
-                  </Button>
-                </Grid>
-              </Grid>
-            </Box> */}
           </Card>
         </Container>
       </Box>
@@ -668,17 +481,3 @@ const EditMedia = () => {
 
 EditMedia.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export default EditMedia;
-// //------ for qr code ------------------------------------------------------------------------
-// const styles = {
-//   inputWrapper: {
-//     margin: "20px 0",
-//     display: "flex",
-//     justifyContent: "space-between",
-//     width: "100%",
-//   },
-//   inputBox: {
-//     flexGrow: 1,
-//     marginRight: 20,
-//   },
-// };
-// // ----------end for qr code -----------------------------------------------------------------

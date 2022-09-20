@@ -56,12 +56,20 @@ const SetColor = (props) => {
     props.parentCallback([backColor, dotColor, eyeDotColor, eyeSquareColor]);
   }, [backColor, dotColor, eyeDotColor, eyeSquareColor]);
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12} md={8}>
-        <RadioGroup name="value2" value={selection.value2} onChange={updateSelection}>
+    <Grid container 
+    spacing={1}>
+      <Grid item 
+      xs={12} 
+      md={8}>
+        <RadioGroup name="value2" 
+        value={selection.value2} 
+        onChange={updateSelection}>
           <Typography variant="button">Dot color</Typography>
           {data.map((datum) => (
-            <Grid item xs={12} md={8} key={datum.id}>
+            <Grid item
+            xs={12} 
+            md={8}
+             key={datum.id}>
               {/* <FormControlLabel
                   label={datum.value}
                   key={datum.id}
@@ -73,13 +81,18 @@ const SetColor = (props) => {
           ))}
         </RadioGroup>
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item 
+      xs={12} 
+      md={4}>
         <FormControlLabel
-          control={<Checkbox checked={checked} onChange={handleChange} />}
+          control={<Checkbox checked={checked} 
+          onChange={handleChange} />}
           label="Custom Eye Color"
         />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item 
+      xs={12} 
+      md={6}>
         <ColorPicker
           name="dotColor"
           value={dotColor}
@@ -89,8 +102,14 @@ const SetColor = (props) => {
           }}
         />
       </Grid>
-      <Grid item xs={12} md={6}></Grid>
-      <Grid item xs={12} md={12}>
+      <Grid item 
+      xs={12} 
+      md={6}>
+
+      </Grid>
+      <Grid item 
+      xs={12} 
+      md={12}>
         <Button>
           <SyncAltIcon />
         </Button>
@@ -109,17 +128,25 @@ const SetColor = (props) => {
         </Select>
       </Grid>
       {checked && (
-        <Grid item xs={6} md={6} sx={12}>
+        <Grid item 
+        xs={6} 
+        md={6} 
+        sx={12}>
           <Typography variant="button">Eye dot color</Typography>
         </Grid>
       )}
       {checked && (
-        <Grid item xs={6} md={6} sx={12}>
+        <Grid item 
+        xs={6} 
+        md={6} 
+        sx={12}>
           <Typography variant="button">Eye square color</Typography>
         </Grid>
       )}
       {checked && (
-        <Grid item xs={12} md={6}>
+        <Grid item
+        xs={12}
+         md={6}>
           <ColorPicker
             defaultValue="transparent"
             value={eyeDotColor}
@@ -128,7 +155,9 @@ const SetColor = (props) => {
         </Grid>
       )}
       {checked && (
-        <Grid item xs={12} md={6}>
+        <Grid item 
+        xs={12} 
+        md={6}>
           <ColorPicker
             defaultValue="transparent"
             value={eyeSquareColor}
@@ -136,22 +165,20 @@ const SetColor = (props) => {
           />
         </Grid>
       )}
-      <Grid item xs={12} md={12}>
+      <Grid item 
+      xs={12} 
+      md={12}>
         <Typography variant="button">Background color</Typography>
       </Grid>
-      <Grid item xs={12} md={12}>
+      <Grid item 
+      xs={12} 
+      md={12}>
         <ColorPicker
           defaultValue="transparent"
           value={backColor}
           onChange={(color) => setBackColor(color.css.backgroundColor)}
         />
       </Grid>
-      {/* <Grid item xs={12} md={12}>
-      <FormControlLabel
-          control={<Checkbox checked={transBackgroundChecked} onChange={handleTransBackgroundChange} />}
-          label="Transparent background"
-        />
-      </Grid> */}
     </Grid>
   );
 };
