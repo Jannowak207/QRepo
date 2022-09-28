@@ -18,11 +18,11 @@ import MUIDataTable from "mui-datatables";
 import { useRouter } from "next/router";
 import { RouterOutlined } from "@mui/icons-material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
 import { red } from "@mui/material/colors";
 import CustomerInfo from "src/components/customer/customer-info";
 import axios from "axios";
 import { baseUrl } from "src/config";
-
 
 const customerServerUrl = `${baseUrl}/admin/customer`;
 
@@ -49,8 +49,6 @@ const getMuiTheme = () =>
   });
 
 const Customers = (props) => {
-
-
   const router = useRouter();
   const [rowData, setRowData] = useState({});
   //for one customer detail data from server
@@ -69,9 +67,9 @@ const Customers = (props) => {
     {
       label: "ID",
       name: "_id",
-      options:{
-        display:false
-      }
+      options: {
+        display: false,
+      },
     },
     {
       label: "First Name",
@@ -97,19 +95,28 @@ const Customers = (props) => {
     // "__V",
   ];
   const [tabledata, settabledata] = useState([]);
+  const [progress, setProgress] = useState();
   useEffect(() => {
     // console.log("mounted");
     getCustomerList();
   }, []);
   const getCustomerList = () => {
     axios
-      .get(`${customerServerUrl}/list`, {
-        params: {
-          key: [],
-          pageNumber: 1,
-          sort: "created_at",
+      .get(
+        `${customerServerUrl}/list`,
+        {
+          params: {
+            key: [],
+            pageNumber: 1,
+            sort: "created_at",
+          },
         },
-      })
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         // console.log("res:", res);
         // console.log("res.data:", res.data);
@@ -121,7 +128,7 @@ const Customers = (props) => {
   };
   const options = {
     filterType: "checkbox",
-    selectableRows:"none",
+    selectableRows: "none",
     onRowClick: onRowClicked,
     //onRowsDelete:false,
   };
@@ -162,6 +169,11 @@ const Customers = (props) => {
                 </Box>
               </Box>
             </Grid>
+            {progress && (
+              <Grid item xl={12} lg={12} sm={12} xs={12}>
+                <LinearProgressWithLabel value={progress} />
+              </Grid>
+            )}
             <Grid item xl={12} lg={12} sm={12} xs={12}>
               <ThemeProvider theme={getMuiTheme()}>
                 <MUIDataTable

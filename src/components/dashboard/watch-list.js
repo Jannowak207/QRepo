@@ -4,10 +4,10 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import LinearProgressWithLabel from "../LinearProgressWithLabel";
 
 import axios from "axios";
 import { baseUrl } from "src/config";
-
 
 const customerServerUrl = `${baseUrl}/admin/customer`;
 
@@ -79,19 +79,28 @@ export const WatchList = (props) => {
     // "__V",
   ];
   const [tabledata, settabledata] = useState([]);
+  const [progress,setProgress]= useState();
   useEffect(() => {
-   // console.log("mounted");
+    // console.log("mounted");
     getCustomerList();
   }, []);
   const getCustomerList = () => {
     axios
-      .get(`${customerServerUrl}/advancedlist`, {
-        params: {
-          key: [],
-          pageNumber: 1,
-          sort: "created_at",
+      .get(
+        `${customerServerUrl}/advancedlist`,
+        {
+          params: {
+            key: [],
+            pageNumber: 1,
+            sort: "created_at",
+          },
         },
-      })
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         // console.log("res:", res);
         // console.log("res.data:", res.data);
@@ -110,9 +119,19 @@ export const WatchList = (props) => {
 
   return (
     <Grid {...props} container spacing={3}>
+      {progress &&
+      <Grid item xl={12} lg={12} sm={12} xs={12}>
+        <LinearProgressWithLabel value = {progress}/>
+      </Grid>
+      }
       <Grid item xl={12} lg={12} sm={12} xs={12}>
         <ThemeProvider theme={getMuiTheme()}>
-          <MUIDataTable title={"Recent 5 customers"} data={tabledata} columns={columns} options={options} />
+          <MUIDataTable
+            title={"Recent 5 customers"}
+            data={tabledata}
+            columns={columns}
+            options={options}
+          />
         </ThemeProvider>
       </Grid>
     </Grid>

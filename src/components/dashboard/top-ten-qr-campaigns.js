@@ -4,6 +4,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import LinearProgressWithLabel from "../LinearProgressWithLabel";
 
 import axios from "axios";
 import { baseUrl } from "src/config";
@@ -31,7 +32,6 @@ const getMuiTheme = () =>
       },
     },
   });
-
 
 export const TopTenQRCampaigns = (props) => {
   const router = useRouter();
@@ -67,15 +67,24 @@ export const TopTenQRCampaigns = (props) => {
     },
   ];
   const [tabledata, settabledata] = useState([]);
+  const [progress, setProgress] = useState();
   useEffect(() => {
     //console.log("mounted");
     getRecentMediaList();
   }, []);
   const getRecentMediaList = () => {
     axios
-      .get(`${mediaServerUrl}/recentlist`, {
-        params: {},
-      })
+      .get(
+        `${mediaServerUrl}/recentlist`,
+        {
+          params: {},
+        },
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         // console.log("res:", res);
         // console.log("res.data:", res.data);
@@ -104,6 +113,11 @@ export const TopTenQRCampaigns = (props) => {
 
   return (
     <Grid {...props} container spacing={3}>
+      {progress && (
+        <Grid item xl={12} lg={12} sm={12} xs={12}>
+          <LinearProgressWithLabel value={progress} />
+        </Grid>
+      )}
       <Grid item xl={12} lg={12} sm={12} xs={12}>
         <ThemeProvider theme={getMuiTheme()}>
           <MUIDataTable

@@ -44,52 +44,6 @@ export const QRGenOptions = (props) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  // const handlePattern = (e) => {
-  //   console.log(e.target.src)
-  //   const baseStr = "http://localhost:3000/static/images/qr_code/patterns/"
-  //   switch (e.target.src) {
-  //     case baseStr+"1.svg":
-  //       console.log("pattern1");
-  //       break;
-  //     case baseStr+"2.png":
-  //       console.log("pattern2");
-  //       break;
-  //     case baseStr+"3.png":
-  //       console.log("pattern3");
-  //       break;
-  //     case baseStr+"4.png":
-  //       console.log("pattern4");
-  //       break;
-  //     case baseStr+"5.png":
-  //       console.log("pattern5");
-  //       break;
-  //     case baseStr+"6.png":
-  //       console.log("pattern6");
-  //       break;
-  //     case baseStr+"7.png":
-  //       console.log("pattern7");
-  //       break;
-  //     case baseStr+"8.png":
-  //       console.log("pattern8");
-  //       break;
-  //     case baseStr+"9.png":
-  //       console.log("pattern9");
-  //       break;
-  //     case baseStr+"10.png":
-  //       console.log("pattern10");
-  //       break;
-  //     case baseStr+"11.png":
-  //       console.log("pattern11");
-  //       break;
-  //     case baseStr+"12.png":
-  //       console.log("pattern12");
-  //       break;
-  //     default:
-  //       console.log("default pattern");
-  //       break;
-  //   }
-
-  // }
 
   const handlePattern = (event, key) => {
     // console.log(event.target);

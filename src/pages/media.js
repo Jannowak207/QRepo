@@ -4,6 +4,7 @@ import { DashboardLayout } from "../components/dashboard-layout";
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import MUIDataTable from "mui-datatables";
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
 import { useRouter } from "next/router";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
@@ -79,14 +80,23 @@ const Medias = () => {
     },
   ];
   const [tabledata, settabledata] = useState([]);
+  const [progress, setProgress] = useState();
   useEffect(() => {
     getMediaList();
   }, []);
   const getMediaList = () => {
     axios
-      .get(`${mediaServerUrl}/list`, {
-        params: {},
-      })
+      .get(
+        `${mediaServerUrl}/list`,
+        {
+          params: {},
+        },
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         settabledata(res.data);
       })
@@ -114,13 +124,8 @@ const Medias = () => {
         }}
       >
         <Container maxWidth={false}>
-          <Grid container 
-          spacing={3}>
-            <Grid item 
-            xl={12} 
-            lg={12} 
-            sm={12} 
-            xs={12}>
+          <Grid container spacing={3}>
+            <Grid item xl={12} lg={12} sm={12} xs={12}>
               <Box
                 sx={{
                   alignItems: "center",
@@ -131,19 +136,18 @@ const Medias = () => {
                 }}
               >
                 <Box sx={{ m: 1 }}>
-                  <Button color="primary" 
-                  variant="contained" 
-                  onClick={onAddButtonClicked}>
+                  <Button color="primary" variant="contained" onClick={onAddButtonClicked}>
                     Add a media
                   </Button>
                 </Box>
               </Box>
             </Grid>
-            <Grid item 
-            xl={12} 
-            lg={12} 
-            sm={12} 
-            xs={12}>
+            {progress && (
+              <Grid item xl={12} lg={12} sm={12} xs={12}>
+                <LinearProgressWithLabel value={progress} />
+              </Grid>
+            )}
+            <Grid item xl={12} lg={12} sm={12} xs={12}>
               <ThemeProvider theme={getMuiTheme()}>
                 <MUIDataTable
                   title={"Media Library"}

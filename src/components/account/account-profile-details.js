@@ -18,6 +18,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import LinearProgressWithLabel from "../LinearProgressWithLabel";
 
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -60,13 +61,23 @@ export const AccountProfileDetails = (props) => {
     newPassword: "",
     confirmNewPassword: "",
   });
+  //for progressbar
+  const [progress, setProgress] = useState();
   // for get admin info
   useEffect(() => {
     if (typeof window !== "undefined") {
       axios
-        .get(`${adminInfoUrl}/get`, {
-          params: JSON.parse(localStorage.getItem("token")),
-        })
+        .get(
+          `${adminInfoUrl}/get`,
+          {
+            params: JSON.parse(localStorage.getItem("token")),
+          },
+          {
+            onDownloadProgress: (data) => {
+              setProgress(Math.round((100 * data.loaded) / data.total));
+            },
+          }
+        )
         .then((res) => {
           if (res.data.status) {
             console.log("get admin:", res.data.data);
@@ -163,9 +174,7 @@ export const AccountProfileDetails = (props) => {
               </Typography>
             )}
             {!isConfirmed && (
-              <Typography variant="subtitle1">
-                Please confirm your new password.
-              </Typography>
+              <Typography variant="subtitle1">Please confirm your new password.</Typography>
             )}
           </DialogContentText>
           <Divider />
@@ -176,6 +185,7 @@ export const AccountProfileDetails = (props) => {
       </Dialog>
 
       <Card>
+        {progress && <LinearProgressWithLabel value={progress} />}
         <Tabs value={tabIndex} onChange={handleTabChange} sx={{ mt: 2 }}>
           <Tab label="My Profile" />
           <Tab label="Password" />

@@ -35,6 +35,7 @@ import { templates } from "../../__mocks__/qr-code/templates";
 import { QRGenOptionCard } from "../../components/qr-code-gen/qr-gen-option-card";
 import FileInput from "../../components/qr-code-gen/file-input";
 import SetColor from "../../components/qr-code-gen/set-color";
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
 // end for qr options -------------------------------------------------------------
 import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
@@ -69,19 +70,29 @@ const EditMedia = (props) => {
   const mediaEditUrl = `${baseUrl}/admin/media/edit`;
   const mediaDelUrl = `${baseUrl}/admin/media/delete`;
   const mediaGetOneUrl = `${baseUrl}/admin/media/one`;
+  const [progress, setProgress] = useState();//for get
+  const [progressEdit,setProgressEdit] =useState();
   // get selected media details data from server when mounted this page
   useEffect(() => {
     axios
-      .get(mediaGetOneUrl, {
-        params: {
-          _id: router.query.id,
+      .get(
+        mediaGetOneUrl,
+        {
+          params: {
+            _id: router.query.id,
+          },
         },
-      })
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         if (res.data) {
           // console.log("one data;", res.data);
           // values = res.data;
-          const u = baseUrl + "/videos/" + res.data.file_name;
+          const u = baseUrl+'/' + res.data.file_url;
           setMediaData({
             ...mediaData,
             fileName: res.data.file_name,
@@ -102,7 +113,11 @@ const EditMedia = (props) => {
   //for edit request to server
   const EditMedia = (media) => {
     axios
-      .post(`${mediaEditUrl}`, media)
+      .post(`${mediaEditUrl}`, media, {
+        onUploadProgress: (data) => {
+          setProgressEdit(Math.round((100 * data.loaded) / data.total));
+        },
+      })
       .then((res) => {
         if (res.data) {
           //  console.log("Edit success:",res.data)
@@ -292,8 +307,7 @@ const EditMedia = (props) => {
                 m: 0,
               }}
             >
-              <Typography variant="h5" 
-              sx={{ m: 3 }}>
+              <Typography variant="h5" sx={{ m: 3 }}>
                 Media Details
               </Typography>
               <Box>
@@ -316,14 +330,12 @@ const EditMedia = (props) => {
                 </Button>
               </Box>
             </Box>
+            {progressEdit && <LinearProgressWithLabel value={progressEdit}/>}
+            {progress && <LinearProgressWithLabel value={progress} />}
             {noChange && (
-              <Grid item 
-              lg={12} 
-              md={12} 
-              sx={12}>
+              <Grid item lg={12} md={12} sx={12}>
                 <Box sx={{ ml: 3 }}>
-                  <Typography color="error"
-                  variant="h6">
+                  <Typography color="error" variant="h6">
                     No changes! Select new file please.
                   </Typography>
                 </Box>
@@ -331,12 +343,8 @@ const EditMedia = (props) => {
             )}
             <Divider />
             <CardContent>
-              <Grid container 
-              spacing={3}>
-                <Grid item 
-                lg={6} 
-                md={6} 
-                sx={12}>
+              <Grid container spacing={3}>
+                <Grid item lg={6} md={6} sx={12}>
                   <TextField
                     //autoFocus
                     aria-readonly
@@ -351,10 +359,7 @@ const EditMedia = (props) => {
                     // onChange={handleChange}
                   />
                 </Grid>
-                <Grid item 
-                lg={6} 
-                md={6} 
-                sx={12}>
+                <Grid item lg={6} md={6} sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -369,10 +374,7 @@ const EditMedia = (props) => {
                   />
                 </Grid>
 
-                <Grid item 
-                lg={6} 
-                md={6} 
-                sx={12}>
+                <Grid item lg={6} md={6} sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -385,10 +387,7 @@ const EditMedia = (props) => {
                     value={mediaData.fileUrl}
                   />
                 </Grid>
-                <Grid item 
-                lg={6} 
-                md={6} 
-                sx={12}>
+                <Grid item lg={6} md={6} sx={12}>
                   <TextField
                     aria-readonly
                     margin="dense"
@@ -403,13 +402,8 @@ const EditMedia = (props) => {
                 </Grid>
               </Grid>
               <Divider />
-              <Grid container 
-              spacint={3} 
-              my={3}>
-                <Grid item 
-                lg={6} 
-                md={6} 
-                sx={12}>
+              <Grid container spacint={3} my={3}>
+                <Grid item lg={6} md={6} sx={12}>
                   <Typography variant="button">Options</Typography>
                   <Accordion
                     expanded={expanded === "panel1"}
@@ -421,8 +415,7 @@ const EditMedia = (props) => {
                       id="panel1bh-header"
                     >
                       <QrCodeScannerIcon />
-                      <Typography variant="button" 
-                      ml={2}>
+                      <Typography variant="button" ml={2}>
                         Choose patterns
                       </Typography>
                     </AccordionSummary>
@@ -530,29 +523,19 @@ const EditMedia = (props) => {
                     <AccordionDetails>
                       <Typography>Eye Patterns</Typography>
 
-                      <Button variant="outlined" 
-                      onClick={onSetEyeType} 
-                      value="dot.dot">
+                      <Button variant="outlined" onClick={onSetEyeType} value="dot.dot">
                         dot.dot
                       </Button>
-                      <Button variant="outlined" 
-                      onClick={onSetEyeType} 
-                      value="dot.square">
+                      <Button variant="outlined" onClick={onSetEyeType} value="dot.square">
                         dot.square
                       </Button>
-                      <Button variant="outlined" 
-                      onClick={onSetEyeType} 
-                      value="dot.extra-rounded">
+                      <Button variant="outlined" onClick={onSetEyeType} value="dot.extra-rounded">
                         dot.extra-rounded
                       </Button>
-                      <Button variant="outlined" 
-                      onClick={onSetEyeType} 
-                      value="square.dot">
+                      <Button variant="outlined" onClick={onSetEyeType} value="square.dot">
                         dot.dot
                       </Button>
-                      <Button variant="outlined" 
-                      onClick={onSetEyeType} 
-                      value="square.square">
+                      <Button variant="outlined" onClick={onSetEyeType} value="square.square">
                         dot.square
                       </Button>
                       <Button
@@ -574,8 +557,7 @@ const EditMedia = (props) => {
                       id="panel3bh-header"
                     >
                       <PortraitIcon fontSize="medium" />
-                      <Typography variant="button" 
-                      ml={2}>
+                      <Typography variant="button" ml={2}>
                         Add logo
                       </Typography>
                     </AccordionSummary>
@@ -593,8 +575,7 @@ const EditMedia = (props) => {
                       id="panel4bh-header"
                     >
                       <BrushIcon />
-                      <Typography variant="button" 
-                      ml={2}>
+                      <Typography variant="button" ml={2}>
                         Set colors
                       </Typography>
                     </AccordionSummary>
@@ -605,17 +586,10 @@ const EditMedia = (props) => {
                 </Grid>
                 <Grid item lg={6} md={6} sx={12}>
                   {/* for qr code---------------------------------------------------------------------- */}
-                  <Grid container 
-                  spacing={0} 
-                  direction="column" 
-                  alignItems="center">
-                    <Grid item 
-                    lg={12} 
-                    md={12} 
-                    sx={12}>
+                  <Grid container spacing={0} direction="column" alignItems="center">
+                    <Grid item lg={12} md={12} sx={12}>
                       <Box>
-                        <Box sx={{ width: "90%" }} 
-                        ref={ref} />
+                        <Box sx={{ width: "90%" }} ref={ref} />
                       </Box>
                     </Grid>
                   </Grid>
@@ -639,9 +613,7 @@ const EditMedia = (props) => {
                       <MenuItem value="jpeg">JPEG</MenuItem>
                       <MenuItem value="webp">WEBP</MenuItem>
                     </Select>
-                    <Button variant="contained" 
-                    color="secondary" 
-                    onClick={onDownloadClick}>
+                    <Button variant="contained" color="secondary" onClick={onDownloadClick}>
                       Download
                     </Button>
                   </Box>

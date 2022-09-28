@@ -19,6 +19,7 @@ import {
   Typography,
   CardHeader,
 } from "@mui/material";
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
 import axios from "axios";
 import { useRouter } from "next/router";
 
@@ -26,9 +27,14 @@ const customerAddUrl = `${baseUrl}/admin/customer/add`;
 const AddCutomer = () => {
   const router = useRouter();
   // add axios function
+  const [progress, setProgress] = useState();
   const AddCustomer = (customer) => {
     axios
-      .post(`${customerAddUrl}`, customer)
+      .post(`${customerAddUrl}`, customer, {
+        onUploadProgress: (data) => {
+          setProgress(Math.round((100 * data.loaded) / data.total));
+        },
+      })
       .then((res) => {
         //  console.log(res.data);
       })
@@ -115,35 +121,24 @@ const AddCutomer = () => {
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ mt: 3, mb: 2, ml: 5 }} 
-              variant="h4">
+              <Typography sx={{ mt: 3, mb: 2, ml: 5 }} variant="h4">
                 Add Customer
               </Typography>
-
+              {progress && <LinearProgressWithLabel value={progress} />}
               <Divider />
 
               <CardContent>
-                <Grid container 
-                spacing={3}>
-                  <Grid item 
-                  lg={12} 
-                  md={12} 
-                  xs={12}>
+                <Grid container spacing={3}>
+                  <Grid item lg={12} md={12} xs={12}>
                     <Box>
                       <Box sx={{ ml: 2, mr: 2 }}>
-                        <Grid container 
-                        spacing={3}>
+                        <Grid container spacing={3}>
                           {!okAllFields && (
-                            <Grid item 
-                            lg={12} 
-                            md={12} 
-                            sx={12}>
+                            <Grid item lg={12} md={12} sx={12}>
                               <Typography color="error">All fields are required</Typography>
                             </Grid>
                           )}
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please specify the name"
@@ -155,9 +150,7 @@ const AddCutomer = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Last Name"
@@ -168,9 +161,7 @@ const AddCutomer = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Phone number"
@@ -181,9 +172,7 @@ const AddCutomer = () => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Email Address"
@@ -195,9 +184,7 @@ const AddCutomer = () => {
                             />
                           </Grid>
 
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="API request left"
@@ -210,9 +197,7 @@ const AddCutomer = () => {
                           </Grid>
                         </Grid>
                         <Divider sx={{ my: 2 }} />
-                        <Typography sx={{ mt: 3 }} 
-                        variant="button" 
-                        gutterBottom>
+                        <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
                           Password
                         </Typography>
                         <TextField
@@ -242,14 +227,10 @@ const AddCutomer = () => {
                 mr: 5,
               }}
             >
-              <Button color="success" 
-              variant="contained" 
-              onClick={onAddClicked}>
+              <Button color="success" variant="contained" onClick={onAddClicked}>
                 Add Customer
               </Button>
-              <Button color="success" 
-              variant="contained"
-               onClick={onCancelClicked}>
+              <Button color="success" variant="contained" onClick={onCancelClicked}>
                 Cancel
               </Button>
             </Box>

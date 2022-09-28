@@ -24,6 +24,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
 var isConfirmed = true;
 var isChanged = false;
 
@@ -32,15 +33,24 @@ const EditCutomer = (props) => {
   const customerDelUrl = `${baseUrl}/admin/customer/delete`;
   const customerGetOneUrl = `${baseUrl}/admin/customer/one`;
   const router = useRouter();
-
+  const [progress, setProgress] = useState();
+  const [progressEdit,setProgressEdit] = useState();
   // get selected customer details data from server when mounted this page
   useEffect(() => {
     axios
-      .get(customerGetOneUrl, {
-        params: {
-          _id: router.query.id,
+      .get(
+        customerGetOneUrl,
+        {
+          params: {
+            _id: router.query.id,
+          },
         },
-      })
+        {
+          onDownloadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+          },
+        }
+      )
       .then((res) => {
         if (res.data) {
           // console.log("one data;", res.data);
@@ -58,7 +68,11 @@ const EditCutomer = (props) => {
   //for edit request to server
   const EditCustomer = (customer) => {
     axios
-      .post(`${customerEditUrl}`, customer)
+      .post(`${customerEditUrl}`, customer,{
+        onUploadProgress: (data) => {
+          setProgressEdit(Math.round((100 * data.loaded) / data.total));
+        },
+      })
       .then((res) => {
         if (res.data) {
           //  console.log("Edit success:",res.data)
@@ -121,35 +135,35 @@ const EditCutomer = (props) => {
   };
 
   //for modal
-    //for modal
-    const [open, setOpen] = useState(false);
-    const handleClickOpen = () => {
-      setOpen(true);
-    };
-  
-    const handleClickClose = () => {
-      setOpen(false);
-    };
+  //for modal
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClickClose = () => {
+    setOpen(false);
+  };
   // for edit save btn clicked
   const handleSaveClick = (event) => {
     // save routine
     //validate
     if (JSON.stringify(values) == JSON.stringify(tempValues)) {
       isChanged = false;
-      setOpen(true)
+      setOpen(true);
     } else {
       isChanged = true;
-      setOpen(false)
+      setOpen(false);
     }
     if (values.newPassword != "" && values.newPassword == values.confirmNewPassword) {
       console.log("here");
       console.log("here ", values);
       values.password = values.newPassword;
       isConfirmed = true;
-      setOpen(false)
+      setOpen(false);
     } else {
       isConfirmed = false;
-      setOpen(true)
+      setOpen(true);
     }
 
     if (isChanged) {
@@ -166,7 +180,7 @@ const EditCutomer = (props) => {
       };
 
       if (values.newPassword == "" || values.newPassword == values.confirmNewPassword) {
-        isConfirmed = true
+        isConfirmed = true;
         EditCustomer(editData);
         router.push("/customers");
       }
@@ -209,9 +223,7 @@ const EditCutomer = (props) => {
               </Typography>
             )}
             {!isConfirmed && (
-              <Typography variant="subtitle1">
-                Please confirm your new password.
-              </Typography>
+              <Typography variant="subtitle1">Please confirm your new password.</Typography>
             )}
           </DialogContentText>
           <Divider />
@@ -238,8 +250,7 @@ const EditCutomer = (props) => {
                 alignItems: "center",
               }}
             >
-              <Typography sx={{ mb: 0 }} 
-              variant="h4">
+              <Typography sx={{ mb: 0 }} variant="h4">
                 Customer Settings
               </Typography>
               <Button
@@ -252,10 +263,12 @@ const EditCutomer = (props) => {
                 Delete your customer
               </Button>
             </Box>
+            
+            {progress && <LinearProgressWithLabel value={progress} />}
+            {progressEdit && <LinearProgressWithLabel value={progressEdit} />}
             <Divider />
             <CardContent>
-              <Grid container 
-              spacing={3}>
+              <Grid container spacing={3}>
                 {/* {!isChanged && (
                   <Grid item 
                   lg={12} 
@@ -278,25 +291,18 @@ const EditCutomer = (props) => {
                     </Typography>
                   </Grid>
                 )} */}
-                <Grid item 
-                lg={12} 
-                md={12} 
-                xs={12}>
+                <Grid item lg={12} md={12} xs={12}>
                   <Box>
                     <Box>
-                      <Tabs value={tabIndex}
-                       onChange={handleTabChange}>
+                      <Tabs value={tabIndex} onChange={handleTabChange}>
                         <Tab label="Account" />
                         <Tab label="Password" />
                       </Tabs>
                     </Box>
                     <Box sx={{ padding: 2 }}>
                       {tabIndex === 0 && (
-                        <Grid container 
-                        spacing={3}>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                        <Grid container spacing={3}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please specify the name"
@@ -308,9 +314,7 @@ const EditCutomer = (props) => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Last Name"
@@ -321,9 +325,7 @@ const EditCutomer = (props) => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Phone number"
@@ -334,9 +336,7 @@ const EditCutomer = (props) => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Email Address"
@@ -348,9 +348,7 @@ const EditCutomer = (props) => {
                             />
                           </Grid>
 
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="Registered on:"
@@ -362,9 +360,7 @@ const EditCutomer = (props) => {
                             />
                           </Grid>
 
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               label="API request left"
@@ -379,18 +375,12 @@ const EditCutomer = (props) => {
                       )}
                       {tabIndex === 1 && (
                         <Box>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
-                            <Typography sx={{ mt: 3 }} 
-                            variant="button" 
-                            gutterBottom>
+                          <Grid item md={6} sx={12}>
+                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
                               Current Password:
                             </Typography>
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               name="password"
@@ -400,18 +390,12 @@ const EditCutomer = (props) => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
-                            <Typography sx={{ mt: 3 }} 
-                            variant="button" 
-                            gutterBottom>
+                          <Grid item md={6} sx={12}>
+                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
                               New Password:
                             </Typography>
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please enter new password"
@@ -423,18 +407,12 @@ const EditCutomer = (props) => {
                               variant="outlined"
                             />
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
-                            <Typography sx={{ mt: 3 }} 
-                            variant="button" 
-                            gutterBottom>
+                          <Grid item md={6} sx={12}>
+                            <Typography sx={{ mt: 3 }} variant="button" gutterBottom>
                               Confirm New Password:
                             </Typography>
                           </Grid>
-                          <Grid item 
-                          md={6} 
-                          sx={12}>
+                          <Grid item md={6} sx={12}>
                             <TextField
                               fullWidth
                               helperText="Please re-enter new password"
@@ -464,9 +442,7 @@ const EditCutomer = (props) => {
                 mr: 3,
               }}
             >
-              <Button color="success" 
-              variant="contained" 
-              onClick={handleSaveClick}>
+              <Button color="success" variant="contained" onClick={handleSaveClick}>
                 Save details
               </Button>
               {/* {!isChanged && (
@@ -491,9 +467,7 @@ const EditCutomer = (props) => {
                   </Typography>
                 </Grid>
               )} */}
-              <Button color="success" 
-              variant="contained" 
-              onClick={handleCancelClick}>
+              <Button color="success" variant="contained" onClick={handleCancelClick}>
                 Cancel
               </Button>
             </Box>

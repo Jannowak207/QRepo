@@ -1,4 +1,5 @@
 import Head from "next/head";
+import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
@@ -13,7 +14,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import FormData from 'form-data';
+
+//for progressbar
+import LinearProgressWithLabel from "src/components/LinearProgressWithLabel";
+import FormData from "form-data";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 // for qr options----------------------------------------------------------------
@@ -26,6 +30,11 @@ import PortraitIcon from "@mui/icons-material/Portrait";
 import BrushIcon from "@mui/icons-material/Brush";
 import FileInput from "../../components/qr-code-gen/file-input";
 import SetColor from "../../components/qr-code-gen/set-color";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 // end for qr options -------------------------------------------------------------
 import AddIcon from "@mui/icons-material/Add";
 import { DashboardLayout } from "../../components/dashboard-layout";
@@ -49,8 +58,18 @@ const qrCode = new QRCodeStyling({
 
 // for media add to server database
 const mediaAddUrl = `${baseUrl}/admin/media/add`;
-const downloadUrl = `${baseUrl}/videos`;
+const downloadUrl = `${baseUrl}`;
+
 const EditMedia = () => {
+    //for modal
+    const [open, setOpen] = useState(false);
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClickClose = () => {
+      setOpen(false);
+    };
   //for download type
   const [changeMode, setChangeMode] = useState("1");
 
@@ -144,31 +163,46 @@ const EditMedia = () => {
 
   const [mediaData, setMediaData] = useState(new FormData());
   const [fileUrl, setFileUrl] = useState("");
+  const [fileSelected, setFileSelected] = useState(null);
 
   const handleChange = (e) => {
     const formData = new FormData();
     formData.append("file", e.target.files[0]);
-
+    setFileSelected(e.target.files[0]);
     setMediaData(formData);
   };
   const router = useRouter();
   //for input validate
   const [okAllFields, setOkAllFields] = useState(true);
   const [isUploaded, setIsUploaded] = useState(false);
+  //for progress bar
+  const [progress, setProgress] = useState();
+  const [isUploading, setIsUploading] = useState(false);
   // for add buton clicked function
   const handleSave = () => {
-    axios
-      .post(mediaAddUrl, mediaData)
-      .then((res) => {
-        if (res.data.status) {
-          setIsUploaded(true);
-          setFileUrl(`${downloadUrl}/${res.data.data.file_name}`);
-          setUrl(`${downloadUrl}/${res.data.data.file_name}`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("hhhhhh",fileSelected)
+    if (fileSelected) {
+      axios
+        .post(mediaAddUrl, mediaData, {
+          onUploadProgress: (data) => {
+            setProgress(Math.round((100 * data.loaded) / data.total));
+            setIsUploading(true);
+          },
+        })
+        .then((res) => {
+          if (res.data.status) {
+            setIsUploaded(true);
+            setFileUrl(`${downloadUrl}/${res.data.data.file_url}`);
+            setUrl(`${downloadUrl}/${res.data.data.file_url}`);
+            setIsUploading(false);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else{
+      setOpen(true);
+    }
   };
 
   const onCancelClicked = () => {
@@ -187,6 +221,22 @@ const EditMedia = () => {
           py: 3,
         }}
       >
+        <Dialog open={open} onClose={handleClickClose}>
+        <DialogTitle color="error">Note</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {!fileSelected && (
+              <Typography variant="subtitle1">
+                There is no selected file. Please select a file to upload.
+              </Typography>
+            )}
+          </DialogContentText>
+          <Divider />
+          <Button variant="outlined" onClick={handleClickClose} sx={{ mt: 2, width: "30%" }}>
+            OK
+          </Button>
+        </DialogContent>
+      </Dialog>
         <Container maxWidth={false}>
           <Card>
             <Box sx={{ display: "flex", justifyContent: "space-between", m: 3 }}>
@@ -208,6 +258,13 @@ const EditMedia = () => {
               </Button>
             </Box>
             <Divider />
+            {isUploading && (
+              <>
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgressWithLabel value={progress} />
+                </Box>
+              </>
+            )}
             <CardContent>
               <Grid container spacing={3}>
                 <Grid item lg={6} md={6} sx={12}>
@@ -237,7 +294,7 @@ const EditMedia = () => {
                   />
                 </Grid>
                 <Grid item lg={4} md={12} sx={12}>
-                  {!isUploaded && (
+                  {!isUploading && !isUploaded && (
                     <Button
                       sx={{ ml: 1 }}
                       color="success"
@@ -245,6 +302,11 @@ const EditMedia = () => {
                       onClick={handleSave}
                       fullWidth
                     >
+                      Upload
+                    </Button>
+                  )}
+                  {isUploading && (
+                    <Button sx={{ ml: 1 }} color="success" variant="contained" fullWidth disabled>
                       Upload
                     </Button>
                   )}

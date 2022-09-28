@@ -21,22 +21,26 @@ import { SignalCellularNull } from "@mui/icons-material";
 const AdminUserSignInUrl = `${baseUrl}/admin/auth/signin`;
 
 const Login = () => {
-  const [storageEmail, setStorateEmail] = useState('')
-  const [storagePassword, setStoragePassword] = useState('')
-  const [token, setToken] = useState(null)
-  useEffect(()=>{
-    if(typeof window !== "undefined"){
+  const [storageEmail, setStorateEmail] = useState("");
+  const [storagePassword, setStoragePassword] = useState("");
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
       // console.log('token:',JSON.parse(localStorage.getItem('token')))
       // console.log('email',JSON.parse(localStorage.getItem('email')).email)
       // console.log('password:',JSON.parse(localStorage.getItem('password')).password)
-      if(localStorage.getItem('token') && localStorage.getItem('email') && localStorage.getItem('password')){
-        setToken(JSON.parse(localStorage.getItem('token')))
-        setStorateEmail(JSON.parse(localStorage.getItem('email')).email)
-        setStoragePassword(JSON.parse(localStorage.getItem('password')).password)
+      if (
+        localStorage.getItem("token") &&
+        localStorage.getItem("email") &&
+        localStorage.getItem("password")
+      ) {
+        setToken(JSON.parse(localStorage.getItem("token")));
+        setStorateEmail(JSON.parse(localStorage.getItem("email")).email);
+        setStoragePassword(JSON.parse(localStorage.getItem("password")).password);
       }
     }
-  },[])
- 
+  }, []);
+
   // for "Add a customer" modal dialog
   const [open, setOpen] = useState(false);
   // for one time show modal-----------------
@@ -59,47 +63,60 @@ const Login = () => {
   const formik = useFormik({
     initialValues: {
       email: storageEmail,
-      password:storagePassword,
+      password: storagePassword,
     },
     validationSchema: Yup.object({
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
       password: Yup.string().max(255).required("Password is required"),
     }),
-    onSubmit: () => {
-      if (token==null) {
-        // console.log('log in page:please sign up and token:',token)
-        
-        // there is no token, so go to register page
-        router.push("/register");
-      } else {
-        // console.log('token',token)
-        // email and password validation for inputed
-        if(formik.values.email == storageEmail && formik.values.password == storagePassword){
-          axios
-          .post(`${AdminUserSignInUrl}`, token)
-          .then((res) => {
-            // console.log('sign in res:',res)
-            if (res.data.status) {
-              //receive data: 1
-              // console.log("admin sign in res:",res.data);
-              router.push("/dashboard"); // go to dashboard page
-            } else {
-              // do modal for problem
-              // console.log("sign in failed. you are deleted.")
-              router.push('/register')
-            }
-          })
-          .catch((err) => console.log(err));
-        } else{
-          //retry enter the info
-          // console.log('Retype your name and password.')
-          //router.push('#')
-          router.reload()
-        }
-        
-      }
-    },
+    // onSubmit: () => {
+    //   if (token==null) {
+    //     // there is no token, so go to register page
+    //     router.push("/register");
+    //   } else {
+    //     // email and password validation for inputed
+    //     if(formik.values.email == storageEmail && formik.values.password == storagePassword){
+    //       axios
+    //       .post(`${AdminUserSignInUrl}`, token)
+    //       .then((res) => {
+    //         if (res.data.status) {
+    //           router.push("/dashboard"); // go to dashboard page
+    //         } else {
+    //           router.push('/register')
+    //         }
+    //       })
+    //       .catch((err) => console.log(err));
+    //     } else{
+    //       router.reload()
+    //     }
+    //   }
+    // },
   });
+  const [loginState, setLoginState] = useState();
+  const onSubmitSend = () => {
+    console.log("clicked.");
+    axios
+      .post(`${AdminUserSignInUrl}`, {
+        email: formik.values.email,
+        password: formik.values.password,
+      })
+      .then((res) => {
+        console.log("res.status:",res.data.status)
+        if (res.data.status == 2) {
+          // have to register
+          setLoginState(2);
+          setOpen(true)
+          console.log("Have to register.");
+        } else if (res.data.status == 1) {
+          router.push("/dashboard");
+        } else {
+          // show modal
+          console.log("show modal");
+          setLoginState(1);
+          setOpen(true);
+        }
+      });
+  };
 
   return (
     <>
@@ -108,16 +125,19 @@ const Login = () => {
       </Head>
 
       <Dialog open={open} onClose={handleClickClose}>
-        <DialogTitle>Blog</DialogTitle>
+        <DialogTitle color="error">Note</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            <Typography variant="subtitle1">
-              My skype id: live:.cid.4f4cbf848b7fc7a3 Telegram: @hmc198918 Please contact me. As you
-              know freelancer.com fee is so much and withdraw time is a bit long. I can trust you so
-              that I can work without your escrow money. Please do not tell me about this on
-              freelancer.com. Because they can restrict my account. They don`t agree to work out and
-              they need to work on freelancer.com site. Are you clear?
-            </Typography>
+            {loginState == 1 && (
+              <Typography variant="subtitle1">
+                Your email or password is not correct. Please retype your information.
+              </Typography>
+            )}
+            {loginState == 2 && (
+              <Typography variant="subtitle1">
+                You have to register.
+              </Typography>
+            )}
           </DialogContentText>
           <Divider />
           <Button variant="outlined" onClick={handleClickClose} sx={{ mt: 2, width: "30%" }}>
@@ -170,11 +190,12 @@ const Login = () => {
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
-                disabled={formik.isSubmitting}
+                // disabled={formik.isSubmitting}
                 fullWidth
                 size="large"
                 type="submit"
                 variant="contained"
+                onClick={onSubmitSend}
               >
                 Sign In Now
               </Button>
